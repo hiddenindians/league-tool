@@ -1,0 +1,2 @@
+export const dashboardTemplate = () => `dash`
+

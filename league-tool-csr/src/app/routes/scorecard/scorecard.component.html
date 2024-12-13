@@ -1,0 +1,26 @@
+<mat-stepper>
+    <form [formGroup]="scoreForm" (ngSubmit)="submitForm()">
+    <mat-step>
+        <h1>Which game are you playing?</h1>
+        <mat-radio-group formControlName="game" aria-label="Select an option">
+            @for(game of games; track game){
+                <mat-radio-button  value="{{game._id}}">{{game.name}}</mat-radio-button>
+
+            }
+        </mat-radio-group>
+        <br />
+        <button mat-button matStepperNext>Next</button>
+
+    </mat-step>
+    <mat-step>
+        <h1>Enter this week's password</h1>
+        <mat-form-field>
+            <mat-label>Password Plz</mat-label>
+            <input formControlName="password" matInput />
+
+        </mat-form-field>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="submitForm()">Submit</button>
+    </mat-step>
+    </form>
+</mat-stepper>

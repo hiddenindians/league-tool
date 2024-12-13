@@ -1,0 +1,39 @@
+<mat-card style="width: 300px; margin: auto; padding: 20px;">
+    <h2>User Settings</h2>
+    <form>
+    <div>
+      <mat-form-field style="width: 100%;">
+        @if(username){<mat-label>{{username}}</mat-label>}@else
+{        <mat-label>Username</mat-label>
+}        <input matInput #usernameInput placeholder="Enter your username">
+      </mat-form-field>
+
+      <mat-form-field style="width: 100%; margin-top: 10px;">
+        @if(email){<mat-label>{{email}}</mat-label>} @else {
+
+        <mat-label>Email</mat-label>}
+        <input matInput type="email" placeholder="Enter your email">
+      </mat-form-field>
+    </div>
+
+    <h2 style="margin-top: 20px;">Game Settings</h2>
+
+
+    <div>
+      <mat-slide-toggle>MTG</mat-slide-toggle>
+      <mat-slide-toggle>Pokemon</mat-slide-toggle>
+      <mat-slide-toggle>Lorcana</mat-slide-toggle>
+    </div>
+    </form>
+    <button (click)="updateUsername(usernameInput.value)" mat-button>Save</button>
+
+  </mat-card>
+  <mat-card>
+    <mat-card-title>Manage Games</mat-card-title>
+    <form>
+      <mat-form-field>
+        <mat-label>New Game</mat-label>
+        <input matInput />
+      </mat-form-field>
+    </form>
+  </mat-card>
