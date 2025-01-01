@@ -1,0 +1,40 @@
+
+.container {
+    padding: 16px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+  }
+
+  .reward-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .reward-points {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0;
+  }
+
+  .sticky-footer {
+    position: sticky;
+    bottom: 0;
+    padding: 16px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .sticky-footer .info {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #666;
+  }
+

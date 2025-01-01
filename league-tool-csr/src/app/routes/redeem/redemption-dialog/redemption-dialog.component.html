@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Confirm Redemption</h2>
+<mat-dialog-content>
+  <p>Are you sure you'd like to redeem <strong>{{ data.totalPoints }}</strong> points for the following reward(s):</p>
+  <ul>
+    @for(reward of data.rewards; track reward.title){
+    <li>{{ reward.title }}</li>
+    }
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">No</button>
+  <button mat-button color="primary" (click)="onConfirm()">Yes</button>
+</mat-dialog-actions>

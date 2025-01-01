@@ -20,4 +20,11 @@ export class UserService {
       gameID: gameID,
     })
   }
+
+  updateRedeemedPoints(id: string, points: number){
+    
+    this._feathers.service('users').patch(id, {
+      total_redeemed: points
+    })
+  }
 }

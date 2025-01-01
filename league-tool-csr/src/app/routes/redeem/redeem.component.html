@@ -1,1 +1,87 @@
-<p>redeem works!</p>
+<div class="container">
+  @if(!isConfirmationPage){
+  <mat-card class="header">
+    <mat-card-title>Choose your rewards</mat-card-title>
+    <mat-card-subtitle
+      >You have <strong>{{ remainingPoints }}</strong> points
+      available.</mat-card-subtitle
+    >
+  </mat-card>
+  @for(reward of rewards; track reward.title){
+  <mat-card class="reward" style="margin-bottom: 16px">
+    <mat-card-content>
+      <div style="display: flex; align-items: center">
+        <mat-checkbox
+          (change)="onRewardSelectionChange(reward)"
+          [disabled]="isCheckboxDisabled(reward)"
+          style="margin-right: 16px"
+        ></mat-checkbox>
+        <!-- <mat-icon style="font-size: 50px; margin-right: 16px">image</mat-icon> -->
+        <div style="flex-grow: 1">
+          <h3 class="reward-title">{{ reward.title }}</h3>
+          <p class="reward-points">
+            {{ availablePoints }}/{{ reward.points }} points to redeem
+          </p>
+
+          <mat-progress-bar
+            mode="determinate"
+            [value]="(availablePoints / reward.points) * 100"
+            [ngClass]="
+              (availablePoints / reward.points) * 100 === 100
+                ? ''
+                : 'danger-bar'
+            "
+          >
+            ></mat-progress-bar
+          >
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  }
+}
+  @if(isConfirmationPage){
+    <div class="confirmation-page" >
+      <h2>Redemption Successful</h2>
+      <p>You have successfully redeemed the following rewards:</p>
+      <ul>
+        @for(reward of selectedRewards; track reward.title){
+        <li>{{ reward.title }} - {{ reward.points }} points</li>
+        }
+      </ul>
+      <p>Steps to claim your rewards:</p>
+      <ol>
+        <li>Visit the designated store or website.</li>
+        <li>Provide your redemption confirmation code.</li>
+        <li>Claim your rewards.</li>
+      </ol>
+      <div class="confirmation-buttons">
+        <button mat-raised-button color="primary">Go to Dashboard</button>
+        <button mat-raised-button color="accent" (click)="claimMoreRewards()">Claim More Rewards</button>
+      </div>
+    </div>
+  }
+</div>
+@if(!isConfirmationPage){
+  <mat-card class="sticky-footer">
+    <div class="info">
+      Selected Rewards: <strong>{{ selectedRewards.size }}</strong> | Will Redeem <strong>{{ toRedeem }}</strong> Points
+    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="confirmRedemptionDialog()"
+      disabled="{{ availablePoints < lowestRedeemable }}"
+    >
+      Redeem
+    </button>
+  </mat-card>
+}
+  @if(!rewards.length){
+  <mat-card>
+    <mat-card-content>
+      <p>No rewards available at this time.</p>
+    </mat-card-content>
+  </mat-card>
+  }
+ 

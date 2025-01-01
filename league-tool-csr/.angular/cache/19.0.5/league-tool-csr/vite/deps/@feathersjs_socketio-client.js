@@ -1,11 +1,11 @@
 import {
   require_lib as require_lib3
-} from "./chunk-OSBADUCG.js";
-import {
-  require_lib as require_lib2
 } from "./chunk-J32EKV2V.js";
 import {
   require_lib
+} from "./chunk-OSBADUCG.js";
+import {
+  require_lib as require_lib2
 } from "./chunk-EBLTVSVM.js";
 import {
   __commonJS
@@ -19,8 +19,8 @@ var require_client = __commonJS({
       value: true
     });
     exports.Service = void 0;
-    var errors_1 = require_lib3();
-    var commons_1 = require_lib();
+    var errors_1 = require_lib();
+    var commons_1 = require_lib2();
     var debug = (0, commons_1.createDebug)("@feathersjs/transport-commons/client");
     var namespacedEmitterMethods = ["addListener", "addEventListener", "emit", "listenerCount", "listeners", "on", "once", "prependListener", "prependOnceListener", "removeAllListeners", "removeEventListener", "removeListener"];
     var otherEmitterMethods = ["eventNames", "getMaxListeners", "setMaxListeners"];
@@ -161,7 +161,7 @@ var require_lib4 = __commonJS({
     });
     exports.default = socketioClient;
     var client_1 = require_client2();
-    var feathers_1 = require_lib2();
+    var feathers_1 = require_lib3();
     function socketioClient(connection, options) {
       if (!connection) {
         throw new Error("Socket.io connection needs to be provided");

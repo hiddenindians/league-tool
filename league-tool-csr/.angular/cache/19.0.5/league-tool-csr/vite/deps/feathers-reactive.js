@@ -1,8 +1,8 @@
 import {
-  require_lib as require_lib2
+  require_lib
 } from "./chunk-OSBADUCG.js";
 import {
-  require_lib
+  require_lib as require_lib2
 } from "./chunk-EBLTVSVM.js";
 import "./chunk-LZU6IAWD.js";
 import {
@@ -1963,8 +1963,8 @@ var require_query = __commonJS({
     });
     exports.FILTERS = exports.OPERATORS = exports.getLimit = void 0;
     exports.filterQuery = filterQuery;
-    var commons_1 = require_lib();
-    var errors_1 = require_lib2();
+    var commons_1 = require_lib2();
+    var errors_1 = require_lib();
     var parse = (value) => typeof value !== "undefined" ? parseInt(value, 10) : value;
     var isPlainObject = (value) => commons_1._.isObject(value) && value.constructor === {}.constructor;
     var validateQueryProperty = (query, operators = []) => {
@@ -2292,7 +2292,7 @@ var require_lib3 = __commonJS({
       value: true
     });
     exports.select = select;
-    var commons_1 = require_lib();
+    var commons_1 = require_lib2();
     __exportStar(require_declarations(), exports);
     __exportStar(require_service(), exports);
     __exportStar(require_query(), exports);
@@ -3096,7 +3096,7 @@ var createDefaultQueryTester = function(query, options) {
 
 // node_modules/feathers-reactive/dist/index.mjs
 var import_json_stable_stringify = __toESM(require_json_stable_stringify(), 1);
-var import_commons = __toESM(require_lib(), 1);
+var import_commons = __toESM(require_lib2(), 1);
 var import_adapter_commons = __toESM(require_lib3(), 1);
 var debug$1 = (0, import_debug.default)("feathers-reactive");
 function cacheObservable(cache = {}, method, key, observable) {
