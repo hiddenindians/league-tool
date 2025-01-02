@@ -50,5 +50,11 @@ export const routes: Routes = [
     loadComponent: () => import('./routes/admin/manage-rewards/manage-rewards.component')
       .then(m => m.ManageRewardsComponent),
     canActivate: [() => inject(AuthService).isAdmin]
+  },
+  {
+    path: 'admin/leagues',
+    loadComponent: () => import('./routes/admin/manage-leagues/manage-leagues.component')
+      .then(m => m.ManageLeaguesComponent),
+    canActivate: [() => inject(AuthService).isAdmin]
   }
 ];

@@ -29,6 +29,8 @@ import { Router } from '@angular/router';
 export class ManageRewardsComponent {
   rewards: Reward[] = [];
   rewardForm: FormGroup;
+  isEditing: boolean = false;
+  editingRewardId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -62,15 +64,57 @@ export class ManageRewardsComponent {
   }
 
   addReward() {
-    if(this.rewardForm.valid) {
-      this.rewardsService.createReward(this.rewardForm.value).subscribe(() => {
-        this.loadRewards();
-        this.rewardForm.reset();
-      })
+    if (this.rewardForm.valid) {
+      if (this.isEditing && this.editingRewardId) {
+        this.saveEdit();
+      } else {
+        this.rewardsService.createReward(this.rewardForm.value).subscribe({
+          next: () => {
+            this.loadRewards();
+            this.rewardForm.reset();
+          },
+          error: (error: any) => {
+            console.error('Error creating reward:', error);
+            // Handle error (show message to user)
+          }
+        });
+      }
     }
   }
-  editReward(reward: Reward) {
 
+  editReward(reward: Reward) {
+    this.isEditing = true;
+    this.editingRewardId = reward._id;
+
+    this.rewardForm.patchValue({
+      title: reward.title,
+      points: reward.points,
+      description: reward.description,
+      type: reward.type,
+      active: reward.active
+    })
+  }
+
+  cancelEdit(){
+    this.isEditing = false;
+    this.editingRewardId = null;
+    this.rewardForm.reset();
+  }
+
+  saveEdit(){
+    if (this.rewardForm.valid && this.editingRewardId) {
+      this.rewardsService.updateReward(this.editingRewardId, this.rewardForm.value)
+        .subscribe({
+          next: () => {
+            this.loadRewards();
+            this.cancelEdit();
+          },
+          error: (error: any) => {
+            console.error('Error updating reward:', error);
+            // Handle error (show message to user)
+          }
+        });
+    }
   }
 
   deleteReward(id: string){

@@ -1,7 +1,7 @@
 <div class="rewards-admin-container">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Add New Reward</mat-card-title>
+        <mat-card-title>{{ isEditing ? 'Edit Reward' : 'Add New Reward' }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <form [formGroup]="rewardForm" (ngSubmit)="addReward()">
@@ -27,9 +27,20 @@
 
           <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
 
-          <button mat-raised-button color="primary" type="submit" [disabled]="!rewardForm.valid">
-            Add Reward
-          </button>
+     
+
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!rewardForm.valid">
+              {{ isEditing ? 'Save Changes' : 'Add Reward' }}
+            </button>
+            @if (isEditing) {
+              <button mat-button color="warn" type="button" (click)="cancelEdit()">
+                Cancel
+              </button>
+            }
+          </div>
+
         </form>
       </mat-card-content>
     </mat-card>
@@ -47,8 +58,8 @@
             <p>Type: {{reward.type}}</p>
             <p>Status: {{reward.active ? 'Active' : 'Inactive'}}</p>
             <div class="reward-actions">
-              <button mat-button color="primary" (click)="editReward(reward)">Edit</button>
-              <button mat-button color="warn" (click)="deleteReward(reward._id)">Delete</button>
+              <button mat-button color="primary" [disabled]="isEditing" (click)="editReward(reward)">Edit</button>
+              <button mat-button color="warn" [disabled]="isEditing" (click)="deleteReward(reward._id)">Delete</button>
             </div>
           </div>
         }

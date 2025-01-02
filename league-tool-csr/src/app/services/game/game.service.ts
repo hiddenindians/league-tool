@@ -10,15 +10,19 @@ export class GameService {
 
   constructor(private _feathers: FeathersService) { }
 
-  createGame(name: string, season: number){
+  createGame(game: any){
     return this._feathers.service('games').create(
       {
-        name: name,
-        season: season,
-        round: 1,
-        week: 1
+        name: game.name,
+        active: game.active,
+        leagues: game.leagues
       }
     )
+  }
+
+  patch(id: string, patchBody: any): Game {
+    return this._feathers.service('games').patch(id, patchBody)
+
   }
 
   getGames(): Observable<Game[]>{

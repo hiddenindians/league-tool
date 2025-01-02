@@ -27,7 +27,7 @@ export class RewardsService {
   }
 
   updateReward(id: string, reward: Partial<Reward>){
-    return this._feathers.service('rewards').patch(id, reward)
+    return this._feathers.service('rewards').watch().patch(id, reward)
   }
 
   deleteReward(id: string){

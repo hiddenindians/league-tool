@@ -18,3 +18,17 @@
     display: flex;
     gap: 8px;
   }
+
+  .form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .reward-item {
+    &.editing {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+  
+  
