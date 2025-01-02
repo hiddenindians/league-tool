@@ -26,6 +26,8 @@ export class DashboardComponent {
   redeemedPoints = 0;
   totalPoints = 0;
   availablePoints = 0;
+  username = "";
+  avatar = ""
   
   constructor(private auth: AuthService) {
     this.auth.currentUser.subscribe((user: any) => {
@@ -33,6 +35,8 @@ export class DashboardComponent {
         this.redeemedPoints = user.total_redeemed || 0;
         this.totalPoints = user.total_points || 0;
         this.availablePoints = this.totalPoints - this.redeemedPoints || 0;
+        this.username = user.username;
+        this.avatar = user.avatar;
     });
   }
 

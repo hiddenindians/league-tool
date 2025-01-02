@@ -27,7 +27,7 @@ export class FeathersService {
     return this._feathers.service(serviceName)
    }
 
-   public authenticate(credentials: {strategy: string, email?: string, password?: string, accessToken?: string}){
+   public authenticate(credentials: {strategy: string, email?: string, password?: string, code?: string}){
     return this._feathers.authenticate(credentials)
    }
 

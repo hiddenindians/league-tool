@@ -13,9 +13,11 @@ import type { UserService } from './users.class'
 export const userSchema = Type.Object(
   {
     _id: ObjectIdSchema(),
+    discordId: Type.Optional(Type.String()),
     email: Type.String(),
     password: Type.Optional(Type.String()),
     username: Type.Optional(Type.String()),
+    avatar: Type.Optional(Type.String()),
     role: Type.Union([Type.Literal('admin'), Type.Literal('player')]),
     total_points: Type.Optional(Type.Number()),
     total_redeemed: Type.Optional(Type.Number()),
@@ -43,7 +45,7 @@ export const userExternalResolver = resolve<User, HookContext<UserService>>({
 })
 
 // Schema for creating new entries
-export const userDataSchema = Type.Pick(userSchema, ['email', 'password'], {
+export const userDataSchema = Type.Pick(userSchema, ['email', 'password', 'discordId', 'username', 'avatar', 'role'], {
   $id: 'UserData'
 })
 export type UserData = Static<typeof userDataSchema>
@@ -63,7 +65,7 @@ export const userPatchResolver = resolve<User, HookContext<UserService>>({
 })
 
 // Schema for allowed query properties
-export const userQueryProperties = Type.Pick(userSchema, ['_id', 'email'])
+export const userQueryProperties = Type.Pick(userSchema, ['_id', 'email', 'discordId', 'role'])
 export const userQuerySchema = Type.Intersect(
   [
     querySyntax(userQueryProperties),

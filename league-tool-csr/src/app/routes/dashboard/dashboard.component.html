@@ -1,5 +1,11 @@
     <mat-card>
       <div class="dashboard-card-content">
+        <div class="user-info">
+          <img *ngIf="avatar" [src]="avatar" alt="User avatar" class="user-avatar">
+          <h2 *ngIf="username">Welcome, {{username}}!</h2>
+        </div>
+        
+
         <h1>{{availablePoints}}</h1>
         <p>points available</p>
         <p>{{totalPoints}} earned | {{redeemedPoints}} used</p>

@@ -11,7 +11,7 @@ import { ScorecardComponent } from './routes/scorecard/scorecard.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
- // { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
+  // { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
 
   {
     path: 'dashboard',
@@ -22,28 +22,44 @@ export const routes: Routes = [
     path: 'auth',
     children: [
       {
-        path: 'login',
-        component: AuthComponent,
-        canActivate: [
-          () =>
-            inject(AuthService).isAuthenticated.pipe(map((isAuth) => !isAuth)),
-        ],
-      },
-      {
         path: 'register',
         component: AuthComponent,
         canActivate: [
           () =>
-            inject(AuthService).isAuthenticated.pipe(map((isAuth) => !isAuth)),
+            inject(AuthService).isAuthenticated.pipe(
+              map((isAuth) => {
+               return !isAuth;
+              })
+            ),
         ],
+        data: { authType: 'register' },
+      },
+      {
+        path: 'login',
+        component: AuthComponent,
+        canActivate: [
+          () =>
+            inject(AuthService).isAuthenticated.pipe(
+              map((isAuth) => {
+                console.log(isAuth)
+               return !isAuth;
+              })
+            ),
+        ],
+        data: { authType: 'login' },
       },
       {
         path: 'callback',
         component: AuthComponent,
         canActivate: [
           () =>
-            inject(AuthService).isAuthenticated.pipe(map((isAuth) => !isAuth)),
+            inject(AuthService).isAuthenticated.pipe(
+              map((isAuth) => {
+               return !isAuth;
+              })
+            ),
         ],
+        data: { authType: 'callback' },
       },
     ],
   },
@@ -78,5 +94,4 @@ export const routes: Routes = [
       ),
     canActivate: [() => inject(AuthService).isAdmin],
   },
-  
 ];

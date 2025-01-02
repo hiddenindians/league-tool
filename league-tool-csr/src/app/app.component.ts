@@ -31,7 +31,7 @@ export class AppComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
-    this.auth.reauthenticate();
+   this.auth.reauthenticate();
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver

@@ -15,12 +15,13 @@ import { User } from '../../shared/models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>({} as User);
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser = this.currentUserSubject
     .asObservable()
     .pipe(distinctUntilChanged());
 
-  public isAuthenticated = this.currentUser.pipe(map((user: any) => !!user));
+  public isAuthenticated = this.currentUser.pipe(map((user: any) => !!user && !! user._id));
+  
   public isAdmin = this.currentUser.pipe(
     map((user: any) => user?.role === 'admin')
   );
@@ -39,13 +40,15 @@ export class AuthService {
   }
 
   public handleDiscordCallback(token: string): Observable<User> {
+    console.log(token)
     return from(
       this._feathers.authenticate({
         strategy: 'discord',
-        accessToken: token
+        code: token
       })
     ).pipe(
       map((data: any) => {
+        console.log(data)
         this.setAuth({
           ...data.user,
         });
@@ -88,7 +91,7 @@ export class AuthService {
 
   public logout(): void {
     this.purgeAuth();
-    void this.router.navigate(['/auth/login']);
+    //void this.router.navigate(['/auth/login']);
   }
 
   public reauthenticate(): void {
@@ -107,7 +110,11 @@ export class AuthService {
   }
 
   public setAuth(user: any): void {
-    this.currentUserSubject.next(user);
+    if (user && user._id) { // Add validation
+      this.currentUserSubject.next(user);
+    } else {
+      this.currentUserSubject.next(null);
+    }
   }
 
   public purgeAuth(): void {

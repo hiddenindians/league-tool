@@ -22,6 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { FeathersService } from '@feathersjs/feathers';
+import { finalize } from 'rxjs';
 
 interface AuthForm {
   email: FormControl;
@@ -51,11 +52,12 @@ export class AuthComponent implements OnInit {
   isSubmitting: Boolean = false;
   authForm: FormGroup<AuthForm>;
   destroyRef = inject(DestroyRef);
+  isDiscordAuthenticating = false;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly userService: AuthService,
+    private readonly userService: AuthService
   ) {
     this.authForm = new FormGroup<AuthForm>({
       email: new FormControl('', {
@@ -68,30 +70,34 @@ export class AuthComponent implements OnInit {
       }),
     });
 
-    const token = this.route.snapshot.queryParamMap.get('token')
-    if (token){
-      this.handleDiscordCallback(token)
+    const token = this.route.snapshot.queryParamMap.get('code');
+    console.log(token)
+    if (token) {
+      this.handleDiscordCallback(token);
     }
   }
 
-  ngOnInit(): void {
-    this.authType = this.route.snapshot.url.at(-1)!.path;
-   if(this.authType.includes('callback')){
-    console.log('cacaca')
-    return
-   }
-   
-    console.log(this.authType);
-    this.title = this.authType === 'login' ? 'Sign In' : 'Sign Up';
-    if (this.authType === 'register') {
-      this.authForm.addControl(
-        'username',
-        new FormControl('', {
-          validators: [Validators.required],
-          nonNullable: true,
-        })
-      );
-    }
+  ngOnInit() {
+    // Use route data instead of parsing URL
+    this.route.data.subscribe((data) => {
+      this.authType = data['authType'];
+
+      if (this.authType.includes('callback')) {
+        console.log('callback');
+        return;
+      }
+
+      console.log(this.authType);
+      this.title = this.authType === 'login' ? 'Sign in' : 'Sign up';
+
+      // Add form control for username if this is the register page
+      if (this.authType === 'register') {
+        this.authForm.addControl(
+          'username',
+          new FormControl('', Validators.required)
+        );
+      }
+    });
   }
 
   loginWithDiscord(): void {
@@ -99,20 +105,25 @@ export class AuthComponent implements OnInit {
   }
 
   private handleDiscordCallback(token: string): void {
+    console.log(token)
+    this.isDiscordAuthenticating = true;
     this.userService
-    .handleDiscordCallback(token)
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe({
-      next: () => {
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err: any) => {
-        this.errors = err;
-        this.isSubmitting = false;
-      },
-    });
+      .handleDiscordCallback(token)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => (this.isDiscordAuthenticating = false))
+      )
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err: any) => {
+          this.errors = err;
+          this.isSubmitting = false;
+          this.router.navigate(['/auth/login']);
+        },
+      });
   }
-
 
   submitForm(): void {
     this.isSubmitting = true;
