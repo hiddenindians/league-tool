@@ -22,14 +22,21 @@
             {{ title }}
           </button>
         </form>
+        <div class="social-login">
+          <button mat-raised-button class="discord-button" (click)="loginWithDiscord()">
+            <img src="assets/discord-logo.png" alt="Discord" class="discord-icon">
+            Continue with Discord
+          </button>
+        </div>
+
     </mat-card-content>
     <mat-card-footer>
       <p class="login-subtext">
         <ng-container *ngIf="authType === 'register'">
-          <a [routerLink]="['/login']">Have an account?</a>
+          <a [routerLink]="['/auth/login']">Have an account?</a>
         </ng-container>
         <ng-container *ngIf="authType === 'login'">
-          <a [routerLink]="['/register']">Need an account?</a>
+          <a [routerLink]="['/auth/register']">Need an account?</a>
         </ng-container>
       </p>
     </mat-card-footer>

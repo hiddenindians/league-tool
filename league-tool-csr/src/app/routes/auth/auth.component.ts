@@ -21,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { FeathersService } from '@feathersjs/feathers';
 
 interface AuthForm {
   email: FormControl;
@@ -66,12 +67,21 @@ export class AuthComponent implements OnInit {
         nonNullable: true,
       }),
     });
+
+    const token = this.route.snapshot.queryParamMap.get('token')
+    if (token){
+      this.handleDiscordCallback(token)
+    }
   }
 
   ngOnInit(): void {
-
     this.authType = this.route.snapshot.url.at(-1)!.path;
-    console.log(this.authType)
+   if(this.authType.includes('callback')){
+    console.log('cacaca')
+    return
+   }
+   
+    console.log(this.authType);
     this.title = this.authType === 'login' ? 'Sign In' : 'Sign Up';
     if (this.authType === 'register') {
       this.authForm.addControl(
@@ -84,9 +94,27 @@ export class AuthComponent implements OnInit {
     }
   }
 
-  submitForm(): void {
- 
+  loginWithDiscord(): void {
+    this.userService.loginWithDiscord();
+  }
 
+  private handleDiscordCallback(token: string): void {
+    this.userService
+    .handleDiscordCallback(token)
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: () => {
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err: any) => {
+        this.errors = err;
+        this.isSubmitting = false;
+      },
+    });
+  }
+
+
+  submitForm(): void {
     this.isSubmitting = true;
     this.errors = { errors: {} };
 
@@ -106,7 +134,6 @@ export class AuthComponent implements OnInit {
     observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
-        
       },
       error: (err: any) => {
         this.errors = err;

@@ -4,7 +4,10 @@ import {
   OverlayContainer,
   OverlayModule,
   OverlayRef
-} from "./chunk-WN5GCPBR.js";
+} from "./chunk-KRAT5E5B.js";
+import {
+  CdkScrollable
+} from "./chunk-TUMX5ULY.js";
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
@@ -12,9 +15,6 @@ import {
   PortalModule,
   TemplatePortal
 } from "./chunk-GGNBL56D.js";
-import {
-  CdkScrollable
-} from "./chunk-SQVMJQOX.js";
 import "./chunk-YXBCOFBW.js";
 import {
   animate,
@@ -36,12 +36,12 @@ import {
   MatCommonModule,
   _IdGenerator,
   hasModifierKey
-} from "./chunk-CM5NNI3A.js";
+} from "./chunk-DDQSJPMV.js";
 import {
   Platform,
   _getFocusedElementPierceShadowDom,
   coerceNumberProperty
-} from "./chunk-KT4SJ3FM.js";
+} from "./chunk-5UZFQHST.js";
 import {
   DOCUMENT
 } from "./chunk-LMIHLO6D.js";

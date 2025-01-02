@@ -1,13 +1,13 @@
 import {
+  ScrollDispatcher,
+  ScrollingModule,
+  ViewportRuler
+} from "./chunk-TUMX5ULY.js";
+import {
   DomPortalOutlet,
   PortalModule,
   TemplatePortal
 } from "./chunk-GGNBL56D.js";
-import {
-  ScrollDispatcher,
-  ScrollingModule,
-  ViewportRuler
-} from "./chunk-SQVMJQOX.js";
 import {
   BidiModule,
   Directionality,
@@ -15,7 +15,7 @@ import {
   _CdkPrivateStyleLoader,
   _IdGenerator,
   hasModifierKey
-} from "./chunk-CM5NNI3A.js";
+} from "./chunk-DDQSJPMV.js";
 import {
   Platform,
   _getEventTarget,
@@ -23,7 +23,7 @@ import {
   coerceArray,
   coerceCssPixelValue,
   supportsScrollBehavior
-} from "./chunk-KT4SJ3FM.js";
+} from "./chunk-5UZFQHST.js";
 import {
   DOCUMENT,
   Location
@@ -2903,4 +2903,4 @@ export {
   Overlay,
   OverlayModule
 };
-//# sourceMappingURL=chunk-WN5GCPBR.js.map
+//# sourceMappingURL=chunk-KRAT5E5B.js.map

@@ -34,6 +34,26 @@ export class AuthService {
     })
   }
 
+  public loginWithDiscord(): void {
+    window.location.href = `${this._feathers.getApiUrl()}/oauth/discord`
+  }
+
+  public handleDiscordCallback(token: string): Observable<User> {
+    return from(
+      this._feathers.authenticate({
+        strategy: 'discord',
+        accessToken: token
+      })
+    ).pipe(
+      map((data: any) => {
+        this.setAuth({
+          ...data.user,
+        });
+        return data.user;
+      })
+    );
+  }
+  
   public logIn(credentials: {
     email: string;
     password: string;
@@ -68,7 +88,7 @@ export class AuthService {
 
   public logout(): void {
     this.purgeAuth();
-    void this.router.navigate(['/login']);
+    void this.router.navigate(['/auth/login']);
   }
 
   public reauthenticate(): void {

@@ -3,7 +3,8 @@
   "port": 3040,
   "public": "./public/",
   "origins": [
-    "http://localhost:3030"
+    "http://localhost:3030", 
+    "http://localhost:4200"
   ],
   "paginate": {
     "default": 10,
@@ -16,7 +17,8 @@
     "secret": "qPkHMGFFURkFEydA0ixfy3eY30/KaOLl",
     "authStrategies": [
       "jwt",
-      "local"
+      "local",
+      "discord"
     ],
     "jwtOptions": {
       "header": {
@@ -29,6 +31,14 @@
     "local": {
       "usernameField": "email",
       "passwordField": "password"
+    },
+    "oauth": {
+      "discord": {
+        "key": "1305372670334079046",
+        "secret": "TRVbyguRp3mahPR63OeqHNmd80nmV_Cr",
+        "scope": ["identify", "email"],
+        "redirect_uri": "http://localhost:4200/auth/callback"
+      }
     }
   }
 }

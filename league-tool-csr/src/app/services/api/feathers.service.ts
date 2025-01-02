@@ -10,6 +10,7 @@ import { rx } from 'feathers-reactive'
 })
 export class FeathersService {
   private _feathers: any;
+  private apiUrl = 'http://localhost:3040'
 
   constructor() {
     const socket = io('http://localhost:3040');
@@ -26,7 +27,7 @@ export class FeathersService {
     return this._feathers.service(serviceName)
    }
 
-   public authenticate(credentials: {strategy: string, email: string, password: string}){
+   public authenticate(credentials: {strategy: string, email?: string, password?: string, accessToken?: string}){
     return this._feathers.authenticate(credentials)
    }
 
@@ -36,6 +37,10 @@ export class FeathersService {
 
    public logout() {
     return this._feathers.logout()
+   }
+
+   public getApiUrl(): string {
+    return this.apiUrl;
    }
 
 
