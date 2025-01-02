@@ -105,7 +105,7 @@ export class AuthComponent implements OnInit {
 
     observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
         
       },
       error: (err: any) => {

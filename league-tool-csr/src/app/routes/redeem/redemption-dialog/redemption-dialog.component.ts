@@ -10,11 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './redemption-dialog.component.scss'
 })
 export class RedemptionDialogComponent {
-
+  
   constructor(
     public dialogRef: MatDialogRef<RedemptionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { rewards: Reward []; totalPoints: number}
-
   ) {}
   
   onCancel(): void {

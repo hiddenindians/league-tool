@@ -51,12 +51,13 @@
       </ul>
       <p>Steps to claim your rewards:</p>
       <ol>
-        <li>Visit the designated store or website.</li>
-        <li>Provide your redemption confirmation code.</li>
+        <li>Show this confirmation page at the register.</li>
         <li>Claim your rewards.</li>
       </ol>
+      <p class="expiry">This redemption will expire on <strong>{{ expiryDate }}</strong> at <strong>{{ expiryTime }}</strong>.</p>
+
       <div class="confirmation-buttons">
-        <button mat-raised-button color="primary">Go to Dashboard</button>
+       <a [routerLink]="['/dashboard']"><button mat-raised-button color="primary">Go to Dashboard</button></a>
         <button mat-raised-button color="accent" (click)="claimMoreRewards()">Claim More Rewards</button>
       </div>
     </div>

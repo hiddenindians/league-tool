@@ -21,7 +21,18 @@ export class AuthService {
     .pipe(distinctUntilChanged());
 
   public isAuthenticated = this.currentUser.pipe(map((user: any) => !!user));
-  constructor(private _feathers: FeathersService, private router: Router) {}
+  public isAdmin = this.currentUser.pipe(
+    map((user: any) => user?.role === 'admin')
+  );
+
+  constructor(private _feathers: FeathersService, private router: Router) {
+    this._feathers.service('users').on('patched', (user: any) => {
+      const currentUser = this.currentUserSubject.value;
+      if (currentUser?._id === user._id){
+        this.currentUserSubject.next(user)
+      }
+    })
+  }
 
   public logIn(credentials: {
     email: string;
@@ -31,7 +42,7 @@ export class AuthService {
     return from(this._feathers.authenticate(withStrategy)).pipe(
       map((data: any) => {
         this.setAuth({
-          token: data.accessToken,
+         // token: data.accessToken,
           ...data.user,
         });
         return data.user;
@@ -61,25 +72,21 @@ export class AuthService {
   }
 
   public reauthenticate(): void {
-
-      // Safe to use window, document, localStorage etc.
- this._feathers
+    // Safe to use window, document, localStorage etc.
+    this._feathers
       .reauthenticate({
         strategy: 'local',
         accessToken: window.localStorage.getItem('feathers-jwt') || null,
       })
-      .then((data: User) => {
-        this.setAuth(data);
+      .then((data: any) => {
+        this.setAuth(data.user);
       })
       .catch((err: any) => {
         this.logout();
       });
-    
-   
   }
 
-
-  public setAuth(user: User): void {
+  public setAuth(user: any): void {
     this.currentUserSubject.next(user);
   }
 

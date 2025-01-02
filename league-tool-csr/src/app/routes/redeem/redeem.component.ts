@@ -10,9 +10,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UserService } from '../../services/user/user.service';
 import { RedemptionDialogComponent } from './redemption-dialog/redemption-dialog.component';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { FeathersService } from '../../services/api/feathers.service';
+import { RewardsService } from '../../services/rewards/rewards.service';
 @Component({
   selector: 'app-redeem',
-  imports: [CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule], 
+  imports: [RouterLink, CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule], 
   templateUrl: './redeem.component.html',
   styleUrl: './redeem.component.scss'
 })
@@ -26,6 +29,9 @@ export class RedeemComponent {
   currentUserId = ""
   isConfirmationPage = false;
   lowestRedeemable = 0;
+  expiryTime: string = ""
+  expiryDate: string = ""
+
   rewards = [
     {
       title: "Canned Pop (355ml)",
@@ -153,28 +159,41 @@ export class RedeemComponent {
 
 
 
-  constructor(private auth: AuthService, private user: UserService, private dialog: MatDialog) {
+  constructor(private rewardsService: RewardsService, private auth: AuthService, private user: UserService, private dialog: MatDialog) {
     this.auth.currentUser.subscribe((user: any) => {
-      this.currentUserId = user.user._id
-      this.redeemedPoints = user.user.total_redeemed || 0;
-      this.totalPoints = user.user.total_points || 0;
+      this.currentUserId = user._id
+      this.redeemedPoints = user.total_redeemed || 0;
+      this.totalPoints = user.total_points || 0;
       this.availablePoints = this.totalPoints - this.redeemedPoints || 0;
       this.remainingPoints = this.availablePoints
     })
 
+    this.rewardsService.getRewards().subscribe((rewards: any) => {
+      this.rewards = rewards
+    })
+
     this.lowestRedeemable = this.rewards.reduce((min, reward) => reward.points < min ? reward.points : min, Infinity)
-    console.log(this.lowestRedeemable)
+  }
+
+  setExpiryTime(): void {
+    const expiryDate = new Date();
+    this.expiryDate = expiryDate.toLocaleDateString();
+    expiryDate.setMinutes(expiryDate.getMinutes() + 20);
+    this.expiryTime = expiryDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
   claimMoreRewards(): void {
     this.isConfirmationPage = false;
     this.selectedRewards.clear();
+    this.updateRemainingPoints()
   }
 
   redeemRewards(){
     this.user.updateRedeemedPoints(this.currentUserId, this.redeemedPoints + Array.from(this.selectedRewards).reduce((sum, r: any) => sum + r.points, 0))
+    this.setExpiryTime()
     this.isConfirmationPage = true
   }
+
 
   isCheckboxDisabled(reward: any): boolean {
     return !this.selectedRewards.has(reward) && reward.points > this.remainingPoints;

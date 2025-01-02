@@ -25,9 +25,9 @@ export class SettingsComponent {
 
   ngOnInit() {
     this.userSubscription = this.auth.currentUser.subscribe((user: any) => {
-      this.username = user.user.username;
-      this.email = user.user.email;
-      this.id = user.user._id
+      this.username = user.username;
+      this.email = user.email;
+      this.id = user._id
     })
   }
 

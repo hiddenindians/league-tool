@@ -29,10 +29,12 @@ export class DashboardComponent {
   
   constructor(private auth: AuthService) {
     this.auth.currentUser.subscribe((user: any) => {
-      console.log(user);
-      this.redeemedPoints = user.user.total_redeemed || 0;
-      this.totalPoints = user.user.total_points || 0;
-      this.availablePoints = this.totalPoints - this.redeemedPoints || 0
+      console.log(user)
+        this.redeemedPoints = user.total_redeemed || 0;
+        this.totalPoints = user.total_points || 0;
+        this.availablePoints = this.totalPoints - this.redeemedPoints || 0;
     });
   }
+
+
 }

@@ -13,10 +13,26 @@ export const gameSchema = Type.Object(
   {
     _id: ObjectIdSchema(),
     name: Type.String(),
-    password: Type.String(),
-    season: Type.Number(),
-    round: Type.Number(),
-    week: Type.Number(),
+    active: Type.Boolean(),
+    leagues: Type.Array(Type.Object({
+      name: Type.String(),
+      active: Type.Boolean(),
+      seasons: Type.Array(Type.Object({
+        seasonNumber: Type.Number(),
+        startDate: Type.Number(),
+        endDate: Type.Number(),
+        active: Type.Boolean(),
+        rounds: Type.Array(Type.Object({
+          round_number: Type.Number(),
+          start_date: Type.Number(),
+          end_date: Type.Number(),
+          scorecard: Type.Object({
+            name: Type.String(),
+          }),
+          active: Type.Boolean()
+        })),
+      })),
+    })),
     createdAt: Type.Number(),
     updatedAt: Type.Number()
   },
@@ -29,7 +45,7 @@ export const gameResolver = resolve<Game, HookContext<GameService>>({})
 export const gameExternalResolver = resolve<Game, HookContext<GameService>>({})
 
 // Schema for creating new entries
-export const gameDataSchema = Type.Pick(gameSchema, ['name', 'season', 'round', 'week', 'updatedAt', 'createdAt'], {
+export const gameDataSchema = Type.Pick(gameSchema, ['name', 'active', 'leagues'], {
   $id: 'GameData'
 })
 export type GameData = Static<typeof gameDataSchema>

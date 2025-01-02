@@ -1,0 +1,20 @@
+.rewards-admin-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  mat-form-field {
+    width: 100%;
+    margin: 8px 0;
+  }
+  .rewards-list {
+    margin-top: 20px;
+  }
+  .reward-item {
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+  }
+  .reward-actions {
+    display: flex;
+    gap: 8px;
+  }

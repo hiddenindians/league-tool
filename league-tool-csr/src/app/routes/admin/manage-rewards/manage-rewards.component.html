@@ -1,0 +1,57 @@
+<div class="rewards-admin-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Add New Reward</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="rewardForm" (ngSubmit)="addReward()">
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" required>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Points</mat-label>
+            <input matInput type="number" formControlName="points" required>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" required></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Type</mat-label>
+            <input matInput formControlName="type" required>
+          </mat-form-field>
+
+          <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="!rewardForm.valid">
+            Add Reward
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="rewards-list">
+      <mat-card-header>
+        <mat-card-title>Existing Rewards</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @for(reward of rewards; track reward._id) {
+          <div class="reward-item">
+            <h3>{{reward.title}}</h3>
+            <p>Points: {{reward.points}}</p>
+            <p>{{reward.description}}</p>
+            <p>Type: {{reward.type}}</p>
+            <p>Status: {{reward.active ? 'Active' : 'Inactive'}}</p>
+            <div class="reward-actions">
+              <button mat-button color="primary" (click)="editReward(reward)">Edit</button>
+              <button mat-button color="warn" (click)="deleteReward(reward._id)">Delete</button>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </div>

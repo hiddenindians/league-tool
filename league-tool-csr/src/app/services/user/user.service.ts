@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FeathersService } from '../api/feathers.service';
+import { BehaviorSubject } from 'rxjs';
+import { User } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
+  private userUpdateSubject = new BehaviorSubject<User | null>(null);
+  public userUpdates = this.userUpdateSubject.asObservable();
+  
   constructor(private _feathers: FeathersService ) {}
 
   updateUsername(id: string, username: string){
@@ -23,7 +27,7 @@ export class UserService {
 
   updateRedeemedPoints(id: string, points: number){
     
-    this._feathers.service('users').patch(id, {
+   return this._feathers.service('users').patch(id, {
       total_redeemed: points
     })
   }

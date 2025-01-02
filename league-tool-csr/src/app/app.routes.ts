@@ -44,5 +44,11 @@ export const routes: Routes = [
     path: 'scorecard',
     component: ScorecardComponent,
     canActivate: [() => inject(AuthService).isAuthenticated]
+  },
+  {
+    path: 'admin/rewards',
+    loadComponent: () => import('./routes/admin/manage-rewards/manage-rewards.component')
+      .then(m => m.ManageRewardsComponent),
+    canActivate: [() => inject(AuthService).isAdmin]
   }
 ];
