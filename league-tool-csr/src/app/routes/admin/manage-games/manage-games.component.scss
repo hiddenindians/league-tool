@@ -1,0 +1,65 @@
+.manage-leagues-container {
+    padding: 20px;
+    
+    .season-card {
+      margin-top: 20px;
+    }
+  
+    .form-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      
+      mat-form-field {
+        flex: 1;
+        min-width: 200px;
+      }
+    }
+  
+    .scorecard-section {
+      margin: 20px 0;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+  
+      h3 {
+        margin-top: 0;
+      }
+    }
+  
+    .point-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 8px;
+  
+      mat-form-field {
+        flex: 1;
+      }
+    }
+  
+    .form-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  
+    .season-list-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+  
+      span:first-child {
+        font-weight: 500;
+      }
+  
+      button {
+        margin-left: auto;
+      }
+    }
+  
+    .my-4 {
+      margin: 24px 0;
+    }
+  }

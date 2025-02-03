@@ -106,6 +106,7 @@ export class AuthService {
       })
       .catch((err: any) => {
         this.logout();
+        this.router.navigate(['/auth/login'])
       });
   }
 

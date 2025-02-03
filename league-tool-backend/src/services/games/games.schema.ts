@@ -22,12 +22,28 @@ export const gameSchema = Type.Object(
         startDate: Type.Number(),
         endDate: Type.Number(),
         active: Type.Boolean(),
+        meetingDays: Type.Array(Type.String()),
+        numberOfRounds: Type.Number(),
+        weeksPerRound: Type.Number(),
+        seasonScorecard: Type.Object({
+          name: Type.String(),
+          achievements: Type.Array(Type.Object({
+            name: Type.String(),
+            value: Type.Number(),
+            description: Type.String()
+          }))
+        }),
         rounds: Type.Array(Type.Object({
           round_number: Type.Number(),
           start_date: Type.Number(),
           end_date: Type.Number(),
           scorecard: Type.Object({
             name: Type.String(),
+            achievements: Type.Array(Type.Object({
+              name: Type.String(),
+              value: Type.Number(),
+              description: Type.String()
+            }))
           }),
           active: Type.Boolean()
         })),

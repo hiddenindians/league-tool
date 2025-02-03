@@ -49,43 +49,20 @@ export class DiscordStrategy extends OAuthStrategy {
   async getEntityData(profile: OAuthProfile, _existingEntity: any, _params: Params) {
     // `profile` is the data returned by getProfile
 
-    const app = this.app
-    const users = app?.service('users')
     if (profile.avatar == null) {
       profile.avatar = 'https://cdn.discordapp.com/embed/avatars/0.png'
     } else {
       const isGif = profile.avatar.startsWith('a_')
       profile.avatar = `https://cdn.discordapp.com/avatars/${profile['id']}/${profile['avatar']}.${isGif ? 'gif' : 'png'}`
     }
-
-    // try {
-    //   const existingUser = await users?.find({
-    //     query: {
-    //       email: profile.email
-    //     }
-    //   });
-    //   console.log(existingUser)
-
-    //   if(existingUser.data && existingUser.data.length > 0){
-    //     const user = existingUser.data[0]
-    //     await users?.patch(user._id, {
-    //       username: profile.username,
-    //       avatar: profile.avatar,
-    //       discordId: profile.id
-    //     })
-
-    //   }
-
-    // } catch (error) {
-    //   console.error('Error checking for existing user:', error)
-    // }
-
+    console.log(_existingEntity)
+    
     return {
       discordId: profile.id,
       username: profile.username,
       email: profile.email,
       avatar: profile.avatar,
-      role: 'player'
+      role: _existingEntity.role  || 'player'
       // games: [],
       //redemptions: [],
       //total_points: 0,
