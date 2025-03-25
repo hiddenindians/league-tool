@@ -15,6 +15,7 @@ export const gameSchema = Type.Object(
     name: Type.String(),
     active: Type.Boolean(),
     leagues: Type.Array(Type.Object({
+      _id: ObjectIdSchema(),
       name: Type.String(),
       active: Type.Boolean(),
       seasons: Type.Array(Type.Object({
@@ -69,7 +70,15 @@ export const gameDataValidator = getValidator(gameDataSchema, dataValidator)
 export const gameDataResolver = resolve<Game, HookContext<GameService>>({})
 
 // Schema for updating existing entries
-export const gamePatchSchema = Type.Partial(gameSchema, {
+export const gamePatchSchema = Type.Partial(Type.Object({
+  ...Type.Partial(gameSchema).properties,
+  $push: Type.Optional(Type.Object({
+    leagues: Type.Object({}) // Define the structure of what can be pushed
+  })),
+  $pull: Type.Optional(Type.Object({
+    leagues: Type.Object({}) 
+  }))
+}), {
   $id: 'GamePatch'
 })
 export type GamePatch = Static<typeof gamePatchSchema>

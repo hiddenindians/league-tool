@@ -5,6 +5,7 @@ import type { MongoDBAdapterParams, MongoDBAdapterOptions } from '@feathersjs/mo
 
 import type { Application } from '../../declarations'
 import type { Game, GameData, GamePatch, GameQuery } from './games.schema'
+import { ObjectId } from 'mongodb'
 
 export type { Game, GameData, GamePatch, GameQuery }
 
@@ -27,6 +28,10 @@ export class GameService<ServiceParams extends Params = GameParams> extends Mong
       // Handle bulk creation
       const items = data.map(item => ({
         ...item,
+        leagues: item.leagues?.map(league => ({
+          ...league,
+          _id: new ObjectId()    
+        })) || [],
         createdAt: now,
         updatedAt: now
       }));
@@ -36,6 +41,10 @@ export class GameService<ServiceParams extends Params = GameParams> extends Mong
     // Handle single item creation
     const item = {
       ...data,
+      leagues: data.leagues?.map(league => ({
+        ...league,
+        _id: new ObjectId()
+      })) || [],
       createdAt: now,
       updatedAt: now
     };
@@ -45,6 +54,25 @@ export class GameService<ServiceParams extends Params = GameParams> extends Mong
   patch(id: Id, data: GamePatch, params?: ServiceParams): Promise<Game>;
   async patch(id: NullableId, data: GamePatch, params?: ServiceParams): Promise<Game | Game[]> {
     const now = Date.now();
+
+     // Check if we're using $push operation for leagues
+     if (data.$push && data.$push.leagues) {
+      // If pushing a single league
+      if (!Array.isArray(data.$push.leagues)) {
+        data.$push.leagues = {
+          ...data.$push.leagues,
+          _id: new ObjectId()
+        };
+      } 
+      // If pushing multiple leagues using $each
+      // else if (data.$push.leagues.$each) {
+      //   data.$push.leagues.$each = data.$push.leagues.$each.map((league: any) => ({
+      //     ...league,
+      //     _id: new ObjectId()
+      //   }));
+      // }
+    }
+
     const patchData = {
       ...data,
       updatedAt: now

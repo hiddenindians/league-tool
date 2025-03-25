@@ -118,6 +118,7 @@ export class AuthComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         },
         error: (err: any) => {
+          console.log(err)
           this.errors = err;
           this.isSubmitting = false;
           this.router.navigate(['/auth/login']);
@@ -147,6 +148,7 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: (err: any) => {
+        console.log(err)
         this.errors = err;
         this.isSubmitting = false;
       },

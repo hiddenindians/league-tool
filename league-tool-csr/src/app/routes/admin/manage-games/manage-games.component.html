@@ -1,14 +1,107 @@
 <!-- manage-leagues.component.html -->
 <!-- Main container with game and league management -->
 
+<div class="manage-games-container">
+  <!-- Existing game creation section remains the same -->
+
+  <div class="games-section">
+    <mat-card class="games-list">
+      <mat-card-header>
+        <mat-card-title>Games</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        @if (isLoading) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        
+        <mat-nav-list>
+          @for (game of games; track game._id) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>sports_esports</mat-icon>
+              <span matListItemTitle>{{game.name}}</span>
+              <mat-chip-list matListItemMeta>
+                <button mat-raised-button color="primary" (click)="navigateToLeagues(game)">Manage Leagues</button>
+                <mat-chip selected>
+                  {{game.active ? 'Active' : 'Inactive'}}
+                </mat-chip>
+              </mat-chip-list>
+            </mat-list-item>
+          } @empty {
+            <mat-list-item>
+              <span matListItemTitle>No games available</span>
+            </mat-list-item>
+          }
+        </mat-nav-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  @if (selectedGame) {
+    <mat-card class="leagues-section">
+      <mat-card-header>
+        <mat-card-title>Leagues for {{selectedGame.name}}</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="leagueForm" (ngSubmit)="addLeague()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>League Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter league name">
+            @if (leagueForm.get('name')?.hasError('required')) {
+              <mat-error>Name is required</mat-error>
+            }
+            @if (leagueForm.get('name')?.hasError('minlength')) {
+              <mat-error>Name must be at least 3 characters</mat-error>
+            }
+          </mat-form-field>
+          
+          <mat-slide-toggle formControlName="active" color="primary">
+            Active
+          </mat-slide-toggle>
+
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="!leagueForm.valid || isLoading">
+            <mat-icon>add</mat-icon>
+            Add League
+          </button>
+        </form>
+
+        <mat-divider class="margin-y"></mat-divider>
+
+        <h3>Existing Leagues</h3>
+        <mat-nav-list>
+          @for (league of selectedGame.leagues; track league._id) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>sports</mat-icon>
+              <span matListItemTitle>{{league.name}}</span>
+              <div matListItemMeta>
+                <button mat-button color="primary" (click)="manageSeasons(league)">
+                  <mat-icon>calendar_today</mat-icon>
+                  Manage Seasons
+                </button>
+                <mat-chip [color]="league.active ? 'primary' : 'warn'" selected>
+                  {{league.active ? 'Active' : 'Inactive'}}
+                </mat-chip>
+              </div>
+            </mat-list-item>
+          } @empty {
+            <mat-list-item>
+              <span matListItemTitle>No leagues available</span>
+            </mat-list-item>
+          }
+        </mat-nav-list>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
 
 
 
 
 
 
-
- <div class="manage-games-container">
+ <!-- <div class="manage-games-container">
     <mat-card class="create-game-section">
       <mat-card-header>
         <mat-card-title>Create New Game</mat-card-title>
@@ -58,7 +151,7 @@
                 <mat-icon matListItemIcon>sports_esports</mat-icon>
                 <span matListItemTitle>{{game.name}}</span>
                 <mat-chip-list matListItemMeta>
-                  <button mat-raised-button color="'primary" (click)="navigateToLeagues(game)">Manage Leagues</button>
+                  <button mat-raised-button color="'primary" (click)="viewGameDetails(game)">View Details</button>
                   <mat-chip selected>
                     {{game.active ? 'Active' : 'Inactive'}}
                   </mat-chip>
@@ -76,8 +169,32 @@
 
     </div>
   </div>
+@if(selectedGame){
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Leagues for {{selectedGame.name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="leagueForm" (ngSubmit)="addLeague()">
+        <mat-form-field>
+          <mat-label>League Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+        <mat-slide-toggle formControlName="active">Active</mat-slide-toggle>
+        <button mat-raised-button color="primary" type="submit">Add League</button>
+      </form>
+      
+      <mat-list>
+        <mat-list-item *ngFor="let league of selectedGame.leagues">
+          <span>{{league.name}}</span>
+          <button mat-button (click)="manageSeasons(league)">Manage Seasons</button>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+}
 
- <!-- @if (selectedGame) {
+  @if (selectedGame) {
     <mat-card class="add-league-section">
       <mat-card-header>
         <mat-card-title>Add League to {{selectedGame.name}}</mat-card-title>

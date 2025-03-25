@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Game } from '../../../shared/models/game.model';
 import { League } from '../../../shared/models/game.model';
 import { MatChipsModule } from '@angular/material/chips';
@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-manage-games',
@@ -33,13 +34,16 @@ import { Router } from '@angular/router';
     MatChipsModule,
     MatInputModule,
     MatSlideToggleModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDividerModule,
+    MatSnackBarModule
   ],
   templateUrl: './manage-games.component.html',
   styleUrl: './manage-games.component.scss',
 })
 export class ManageGamesComponent {
   gameForm: FormGroup;
+  leagueForm: FormGroup;
   games: Game[] = [];
   isLoading: boolean = false;
   selectedGame: Game | null = null;
@@ -53,6 +57,11 @@ export class ManageGamesComponent {
     this.gameForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       active: [true],
+    });
+
+    this.leagueForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      active: [true]
     });
     
   }
@@ -98,11 +107,62 @@ export class ManageGamesComponent {
     this.selectedGame = game;
   }
 
-
+  private refreshGameData() {
+    if (this.selectedGame) {
+      this.gameService.getGame(this.selectedGame._id).then((updatedGame: any) => {
+        this.selectedGame = updatedGame;
+        // Also update the game in the games array
+        const index = this.games.findIndex(g => g._id === updatedGame._id);
+        if (index !== -1) {
+          this.games[index] = updatedGame;
+        }
+      });
+    }
+  }
 
   navigateToLeagues(game: Game){
-    this.router.navigate(['/admin/games', game._id, 'leagues'])
+    this.selectedGame = game;
+    // Uncomment the league management section in the HTML
+    
+    // Optional: Scroll to the leagues section
+    setTimeout(() => {
+      const leaguesSection = document.querySelector('.add-league-section');
+      leaguesSection?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }
 
+  manageSeasons(league: League) {
+    // Navigate to seasons management view
+  }
+
+  viewGameDetails(game: Game){
+    this.selectedGame = game
+  }
+
+  addLeague() {
+    if (this.leagueForm.valid && this.selectedGame) {
+      const newLeague: Partial<League> = {
+        name: this.leagueForm.value.name,
+        active: this.leagueForm.value.active,
+        seasons: []
+      };
+
+      // Update the game with the new league
+      this.gameService.patch(this.selectedGame._id, {
+        $push: { leagues: newLeague }
+      }).then(() => {
+        this.snackBar.open('League added successfully', 'Close', {
+          duration: 3000
+        });
+        this.leagueForm.reset({ active: true });
+        // Refresh the selected game data
+        this.refreshGameData();
+      }).catch(error => {
+        this.snackBar.open('Error adding league', 'Close', {
+          duration: 3000
+        });
+      });
+    }
   }
 
   

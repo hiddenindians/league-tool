@@ -82,6 +82,7 @@ export class AuthService {
       username: userData.username,
       email: userData.email,
       password: userData.password,
+      role: 'player'
     };
 
     return from(

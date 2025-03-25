@@ -6,6 +6,7 @@ export interface Game {
 }
 
 export interface League {
+    _id: string,
     name: string,
     active: boolean,
     seasons: Season[]
