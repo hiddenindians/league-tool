@@ -48,7 +48,7 @@ export class DiscordStrategy extends OAuthStrategy {
 
   async getEntityData(profile: OAuthProfile, _existingEntity: any, _params: Params) {
     // `profile` is the data returned by getProfile
-
+    console.log(profile)
     if (profile.avatar == null) {
       profile.avatar = 'https://cdn.discordapp.com/embed/avatars/0.png'
     } else {
@@ -62,7 +62,7 @@ export class DiscordStrategy extends OAuthStrategy {
       username: profile.username,
       email: profile.email,
       avatar: profile.avatar,
-      role: _existingEntity.role  || 'player'
+      role: _existingEntity?.role  ?? 'player',
       // games: [],
       //redemptions: [],
       //total_points: 0,

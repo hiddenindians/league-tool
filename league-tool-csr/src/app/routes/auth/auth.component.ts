@@ -22,7 +22,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { FeathersService } from '@feathersjs/feathers';
-import { finalize } from 'rxjs';
+import { delay, filter, finalize, map, switchMap, take } from 'rxjs';
 
 interface AuthForm {
   email: FormControl;
@@ -71,7 +71,7 @@ export class AuthComponent implements OnInit {
     });
 
     const token = this.route.snapshot.queryParamMap.get('code');
-    console.log(token)
+    console.log(token);
     if (token) {
       this.handleDiscordCallback(token);
     }
@@ -105,27 +105,23 @@ export class AuthComponent implements OnInit {
   }
 
   private handleDiscordCallback(token: string): void {
-    console.log(token)
+    console.log(token);
     this.isDiscordAuthenticating = true;
     this.userService
       .handleDiscordCallback(token)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
+        // Add delay to ensure auth state is properly set
         finalize(() => (this.isDiscordAuthenticating = false))
       )
       .subscribe({
-        next: () => {
-          this.router.navigate(['/dashboard']);
-        },
         error: (err: any) => {
-          console.log(err)
+          console.log(err);
           this.errors = err;
           this.isSubmitting = false;
-          this.router.navigate(['/auth/login']);
         },
       });
   }
-
   submitForm(): void {
     this.isSubmitting = true;
     this.errors = { errors: {} };
@@ -148,7 +144,7 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: (err: any) => {
-        console.log(err)
+        console.log(err);
         this.errors = err;
         this.isSubmitting = false;
       },

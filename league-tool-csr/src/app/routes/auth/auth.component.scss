@@ -60,13 +60,9 @@
   background-color: #7289DA !important; // Discord's brand color
   color: white !important;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 8px 16px;
 }
 
 .discord-icon {
-  width: 24px;
-  height: 24px;
+  height: 1rem;
+  margin-right: 0.5rem;
 }
