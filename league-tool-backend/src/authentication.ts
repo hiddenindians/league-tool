@@ -12,6 +12,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import type { Application } from './declarations'
 import { oauth, OAuthProfile, OAuthStrategy } from '@feathersjs/authentication-oauth'
 import { Params } from '@feathersjs/feathers'
+import { clearOauthCookies } from './hooks/clear-oauth-cookies'
 
 declare module './declarations' {
   interface ServiceTypes {
@@ -26,12 +27,32 @@ export const authentication = (app: Application) => {
   authentication.register('local', new LocalStrategy())
   authentication.register('discord', new DiscordStrategy())
   app.use('authentication', authentication)
+
+   app.service('authentication').hooks({
+    before: {
+      remove: []
+    }
+  });
+
+
   app.configure(oauth())
 }
 
 export class DiscordStrategy extends OAuthStrategy {
 
+
+
   async getProfile(authResult: AuthenticationRequest) {
+        const { headers } = this.app?.get('authentication')?.oauth?.discord || {}
+
+    // Clear relevant cookies before starting a new OAuth request
+    const res = authResult?.response
+    console.log("authResult:" + authResult)
+    if (res?.clearCookie) {
+      res.clearCookie('feathers-jwt')
+      res.clearCookie('connect.sid')
+    }
+
     if (authResult.code) {
       const tokenData = await this.getTokenResponse(authResult.code)
       authResult.accessToken = tokenData.access_token
@@ -54,7 +75,6 @@ export class DiscordStrategy extends OAuthStrategy {
   }
 
   async getEntityQuery(profile: OAuthProfile, _params: Params): Promise<{ [x: string]: any }> {
-    console.log(profile)
     return {
       $or: [{ email: profile.email }, { discordId: profile.id }]
     }

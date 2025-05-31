@@ -11,6 +11,7 @@ import socketio from '@feathersjs/socketio-client';
 import authentication from '@feathersjs/authentication-client';
 import { rx } from 'feathers-reactive';
 import {environment} from '../../../../src/environment/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class FeathersService {
     ? 'https://play-api.shopnekos.ca'
     : 'http://localhost:3040';
 
-  constructor() {
+  constructor(  private http: HttpClient) {
     const socket = environment.production ? io('https://play-api.shopnekos.ca') : io('http://localhost:3040');
 
     this._feathers = feathers();
@@ -55,7 +56,19 @@ export class FeathersService {
   }
 
   public logout() {
-    return this._feathers.logout();
+        const jwt = localStorage.getItem('feathers-jwt');
+
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
+
+    return this.http
+      .delete(`${this.apiUrl}/authentication`, { headers, withCredentials: true, observe: 'response'})
+      .toPromise()
+      .then((res: any)=>{
+      //  return this._feathers.logout();
+        console.log('Response Headers:', res.headers);
+
+      
+      })
   }
 
   public getApiUrl(): string {

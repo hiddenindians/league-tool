@@ -38,6 +38,8 @@ export class AuthService {
   }
 
   public loginWithDiscord(): void {
+window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+  window.document.cookie = 'feathers-oauth.sig=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
     window.location.href = `${this._feathers.getApiUrl()}/oauth/discord`;
   }
 
