@@ -55,6 +55,7 @@ let authRateLimit: any;
 // General rate limit config
 
 const app: Application = koa(feathers())
+app.proxy = true
 
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
