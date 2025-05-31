@@ -112,12 +112,12 @@ window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:0
       .logout()
       .then(() => {
         this.purgeAuth();
-        void this.router.navigate(['/auth/login']);
+      window.location.href = '/auth/login'; // <-- full reload
       })
       .catch((err: any) => {
         console.log('logout failed', err);
         this.purgeAuth();
-        this.router.navigate(['/auth/login']);
+      window.location.href = '/auth/login'; // <-- full reload
       });
   }
 
@@ -148,6 +148,7 @@ window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:0
   }
 
   public purgeAuth(): void {
+    localStorage.removeItem('feathers-jwt')
     this.currentUserSubject.next(null);
   }
 
