@@ -18,11 +18,11 @@ import {environment} from '../../../../src/environment/environment';
 export class FeathersService {
   private _feathers: any;
   private apiUrl = environment.production
-    ? 'https://play-api.shopnekos.ca:3040'
+    ? 'https://play-api.shopnekos.ca'
     : 'http://localhost:3040';
 
   constructor() {
-    const socket = environment.production ? io('https://play-api.shopnekos.ca:3040') : io('http://localhost:3040');
+    const socket = environment.production ? io('https://play-api.shopnekos.ca') : io('http://localhost:3040');
 
     this._feathers = feathers();
     this._feathers.configure(socketio(socket));
