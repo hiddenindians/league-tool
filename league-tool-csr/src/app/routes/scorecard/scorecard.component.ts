@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioButton, MatRadioModule } from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FeathersService } from '../../services/api/feathers.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +17,7 @@ import { UserService } from '../../services/user/user.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../shared/models/user.model';
 import { Errors } from '../../shared/models/errors.model';
-import { RouterLink } from '@angular/router';
+//import { RouterLink } from '@angular/router';
 
 interface ScoreForm {
   game: FormControl;
@@ -33,7 +33,7 @@ interface ScoreForm {
     MatButtonModule,
     MatStepperModule,
     MatRadioModule,
-    RouterLink,
+   // RouterLink,
   ],
   templateUrl: './scorecard.component.html',
   styleUrl: './scorecard.component.scss',
