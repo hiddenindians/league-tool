@@ -49,6 +49,7 @@ export const rewardQueryProperties = Type.Pick(rewardSchema, ['_id', 'title', 'a
 export const rewardQuerySchema = Type.Intersect(
   [
 Type.Object({
+  active: Type.Optional(Type.Boolean()),
   $limit: Type.Optional(Type.Number()),
   $sort: Type.Optional(
     Type.Object({

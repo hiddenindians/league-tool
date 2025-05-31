@@ -3,6 +3,8 @@ export interface Game {
     name: string;
     active: boolean;
     leagues: League[];
+    participation_points: number;
+    password: string
 }
 
 export interface League {

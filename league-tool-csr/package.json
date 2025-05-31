@@ -26,6 +26,7 @@
     "@feathersjs/socketio-client": "^5.0.31",
     "axios": "^1.7.9",
     "feathers-reactive": "^0.11.0",
+    "random-word-slugs": "^0.1.7",
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.8.1",
     "tslib": "^2.3.0",

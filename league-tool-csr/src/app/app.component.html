@@ -4,9 +4,11 @@
         <mat-toolbar class="mat-primary">Menu</mat-toolbar>
         <mat-nav-list>
             <a mat-list-item [routerLink]="['/dashboard']">Dashboard</a>
-            <a mat-list-item [routerLink]="['/settings']"> Settings <mat-icon>settings</mat-icon></a>
+            <a mat-list-item [routerLink]="['/settings']"> Settings</a>
+            @if(isAdmin){
             <a mat-list-item [routerLink]="['/admin/rewards']">Manage Rewards</a>
-            <a mat-list-item [routerLink]="['/admin/leagues']">Manage Leagues</a>
+            <a mat-list-item [routerLink]="['/admin/leagues']">Manage Games</a>
+            }
 
         </mat-nav-list>
     </mat-sidenav>
@@ -17,7 +19,7 @@
                 <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
             </button>
             }
-            <span>League Tool</span>
+            <span>{{title}}</span>
             
         </mat-toolbar>
         <router-outlet />

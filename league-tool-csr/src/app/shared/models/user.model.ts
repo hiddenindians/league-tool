@@ -10,5 +10,6 @@ export interface User {
     total_redeemed: number,
     games: [{}],
     redemptions: [{}] 
+    bonus_codes_used: [{}]
     
 }

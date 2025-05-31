@@ -1,3 +1,4 @@
 export interface Errors {
-    errors: { [key: string]: string };
-  }
+  message?: string;
+  errors: { [key: string]: string };
+}

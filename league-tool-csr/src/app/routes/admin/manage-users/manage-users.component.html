@@ -1,0 +1,63 @@
+<mat-card class="manage-users-card">
+  <mat-card-header>
+    <mat-card-title>Manage Users</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let user of users" class="user-item">
+        <!-- Row 1: Icon + Username -->
+        <div class="row user-header">
+          <mat-icon>person</mat-icon>
+          <span class="username">{{ user.username }}</span>
+        </div>
+
+        <!-- Row 2: Email -->
+        <div class="row user-email">
+          <span>{{ user.email }}</span>
+        </div>
+
+        <!-- Row 3: Actions & Chips -->
+        <div class="row user-actions">
+          <ng-container *ngIf="editingUser?._id !== user._id; else editTpl">
+            <button mat-stroked-button color="primary" (click)="startEdit(user)">
+              <mat-icon>edit</mat-icon>
+              Edit Points
+            </button>
+          </ng-container>
+          <ng-template #editTpl>
+            <div class="edit-container">
+              <mat-form-field appearance="outline" class="points-edit">
+                <mat-label>Total Points</mat-label>
+                <input matInput type="number" [(ngModel)]="editingUser!.total_points" />
+              </mat-form-field>
+              <button mat-icon-button color="primary" (click)="savePoints(editingUser)">
+                <mat-icon>check</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="cancelEdit()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+
+          <mat-chip color="accent" selected>
+            Total: {{ editingUser?._id === user._id ? editingUser!.total_points : user.total_points }}
+          </mat-chip>
+          <mat-chip color="warn" selected>
+            Redeemed: {{ user.total_redeemed }}
+          </mat-chip>
+          <mat-chip color="primary" selected>
+            Available: {{ (editingUser?._id === user._id ? editingUser!.total_points : user.total_points) - user.total_redeemed }}
+          </mat-chip>
+          <mat-chip [color]="user.role==='admin'?'primary':'warn'" selected>
+            {{ user.role }}
+          </mat-chip>
+        </div>
+      </mat-list-item>
+
+      <mat-list-item *ngIf="users.length === 0">
+        <span>No users available</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

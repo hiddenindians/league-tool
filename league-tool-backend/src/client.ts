@@ -4,16 +4,19 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { mailerClient } from './services/mailer/mailer.shared'
+export type { Mailer, MailerData, MailerQuery, MailerPatch } from './services/mailer/mailer.shared'
+
+import { authManagementClient } from './services/auth-management/auth-management.shared'
+export type {
+  AuthManagement,
+  AuthManagementData,
+  AuthManagementQuery,
+  AuthManagementPatch
+} from './services/auth-management/auth-management.shared'
+
 import { rewardClient } from './services/rewards/rewards.shared'
 export type { Reward, RewardData, RewardQuery, RewardPatch } from './services/rewards/rewards.shared'
-
-import { validatePasswordClient } from './services/validate-password/validate-password.shared'
-export type {
-  ValidatePassword,
-  ValidatePasswordData,
-  ValidatePasswordQuery,
-  ValidatePasswordPatch
-} from './services/validate-password/validate-password.shared'
 
 import { gameClient } from './services/games/games.shared'
 export type { Game, GameData, GameQuery, GamePatch } from './services/games/games.shared'
@@ -49,7 +52,9 @@ export const createClient = <Configuration = any,>(
 
   client.configure(userClient)
   client.configure(gameClient)
-  client.configure(validatePasswordClient)
+  // client.configure(validatePasswordClient)
   client.configure(rewardClient)
+  client.configure(authManagementClient)
+  client.configure(mailerClient)
   return client
 }

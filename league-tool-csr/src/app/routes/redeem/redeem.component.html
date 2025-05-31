@@ -7,7 +7,7 @@
       available.</mat-card-subtitle
     >
   </mat-card>
-  @for(reward of rewards; track reward.title){
+  @for(reward of rewards; track reward._id){
   <mat-card class="reward" style="margin-bottom: 16px">
     <mat-card-content>
       <div style="display: flex; align-items: center">
@@ -72,7 +72,7 @@
       mat-raised-button
       color="primary"
       (click)="confirmRedemptionDialog()"
-      disabled="{{ availablePoints < lowestRedeemable }}"
+      disabled="{{ availablePoints - toRedeem < 0 }}"
     >
       Redeem
     </button>

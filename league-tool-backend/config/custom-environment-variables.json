@@ -1,10 +1,20 @@
 {
-  "port": {
-    "__name": "PORT",
-    "__format": "number"
-  },
-  "host": "HOSTNAME",
   "authentication": {
-    "secret": "FEATHERS_SECRET"
+    "secret": "FEATHERS_SECRET",
+    "oauth": {
+      "discord": {
+        "client_id": "DISCORD_CLIENT_ID",
+        "secret": "DISCORD_CLIENT_SECRET"
+      }
+    }
+  },
+  "mailgun": {
+    "user": "MAILGUN_USER",
+    "pass": "MAILGUN_PWD",
+    "host": "SMTP_HOST",
+    "port": {
+      "__name":"SMTP_PORT",
+      "__format": "number"
+    }
   }
 }

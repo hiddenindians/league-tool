@@ -26,13 +26,21 @@ import { MatListModule } from '@angular/material/list';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'league-tool-csr';
-  private auth = inject(AuthService);
+  title = "Neko's League Tool";
+  auth = inject(AuthService);
+  isAdmin: boolean = false
+  userSubscription: any
   private breakpointObserver = inject(BreakpointObserver);
 
   ngOnInit() {
-   this.auth.reauthenticate();
-  }
+this.userSubscription = this.auth.isAdmin.subscribe((data)=> {
+  console.log(data)
+  this.isAdmin = data
+})  }
+
+ngOnDestroy(){
+this.userSubscription.unsubscribe()
+}
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)

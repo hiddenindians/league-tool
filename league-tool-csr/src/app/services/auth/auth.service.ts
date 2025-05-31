@@ -1,16 +1,13 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import {  Injectable, PLATFORM_ID } from '@angular/core';
 import { FeathersService } from '../api/feathers.service';
 import { Router } from '@angular/router';
 import {
   BehaviorSubject,
   distinctUntilChanged,
-  filter,
   from,
   map,
   Observable,
   switchMap,
-  take,
-  tap,
 } from 'rxjs';
 import { User } from '../../shared/models/user.model';
 
@@ -45,29 +42,30 @@ export class AuthService {
   }
 
   public handleDiscordCallback(token: string): Observable<User> {
-    return new Observable(subscriber => {
-      this._feathers.authenticate({
-        strategy: 'discord',
-        code: token
-      })
-      .then((data: any) => {
-        // First set the auth
-        this.setAuth(data.user);
-        
-        // Then explicitly reauthenticate to ensure state is synced
-        return this._feathers.reauthenticate();
-      })
-      .then((data: any) => {
-        this.setAuth(data.user);
-        subscriber.next(data.user);
-        subscriber.complete();
-        this.router.navigateByUrl('/dashboard')
-      })
-      .catch((error: any) => {
-        subscriber.error(error);
-      });
+    return new Observable((subscriber) => {
+      this._feathers
+        .authenticate({
+          strategy: 'discord',
+          code: token,
+        })
+        .then((data: any) => {
+          // First set the auth
+          this.setAuth(data.user);
+
+          // Then explicitly reauthenticate to ensure state is synced
+          return this._feathers.reauthenticate();
+        })
+        .then((data: any) => {
+          this.setAuth(data.user);
+          subscriber.next(data.user);
+          subscriber.complete();
+          this.router.navigateByUrl('/dashboard');
+        })
+        .catch((error: any) => {
+          subscriber.error(error);
+        });
     });
-}
+  }
 
   public logIn(credentials: {
     email: string;
@@ -95,6 +93,11 @@ export class AuthService {
       email: userData.email,
       password: userData.password,
       role: 'player',
+      games: [],
+      redemptions: [],
+      total_points: 0,
+      total_redeemed: 0
+
     };
 
     return from(
@@ -103,27 +106,31 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.purgeAuth();
-    //void this.router.navigate(['/auth/login']);
+    this._feathers
+      .logout()
+      .then(() => {
+        this.purgeAuth();
+        void this.router.navigate(['/auth/login']);
+      })
+      .catch((err: any) => {
+        console.log('logout failed', err);
+        this.purgeAuth();
+        this.router.navigate(['/auth/login']);
+      });
   }
 
   public reauthenticate(): Promise<void> {
     // Safe to use window, document, localStorage etc.
     return new Promise((resolve, reject) => {
       this._feathers
-        .reauthenticate(
-          //{
-          // strategy: 'local',
-          // accessToken: window.localStorage.getItem('feathers-jwt') || null,
-      //  }
-      )
+        .reauthenticate()
         .then((data: any) => {
           this.setAuth(data.user);
           resolve();
         })
         .catch((err: any) => {
           this.logout();
-          this.router.navigate(['/auth/login']);
+          // this.router.navigate(['/auth/login']);
           reject(err);
         });
     });
@@ -140,5 +147,31 @@ export class AuthService {
 
   public purgeAuth(): void {
     this.currentUserSubject.next(null);
+  }
+
+  public forgotPassword(email: string):Observable<void> {
+    console.log('forgot')
+    return this._feathers
+      .service('auth-management')
+      .watch()
+      .create({action: 'sendResetPwd', value: {email: email}})
+
+
+  }
+
+  public resetPassword(token: string, password: string):Observable<void>{
+    return this._feathers
+      .service('auth-management')
+      .watch()
+      .create({action: 'resetPwdLong', value: { 
+        token, password      }})
+
+  }
+
+  public verifyToken(token: string): Observable<void> {
+    return this._feathers
+      .service('auth-management')
+      .watch()
+      .create({ action: 'verifySignupLong', value:  token });
   }
 }

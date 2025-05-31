@@ -1,0 +1,21 @@
+{
+    "origins": [
+        "http://localhost:3040",
+        "http://localhost:4200",
+        "https://play.shopnekos.ca",
+        "https://play-api.shopnekos.ca"
+    ],
+    "host": "0.0.0.0",
+    "link_domain": "https://play.shopnekos.ca",
+    "mongodb": "mongodb://mongo:27017/league-tool-backend",
+    "authentication": {
+        "jwt_options": {
+            "audience": "http://play.shopnekos.ca"
+        },
+        "oauth": {
+            "discord": {
+                "redirect_uri": "https://play.shopnekos.ca/auth/callback"
+            }
+        }
+    }
+}

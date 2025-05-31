@@ -1,0 +1,16 @@
+ a {
+    color: #c9c9c9;
+  }
+  .game-radio-group {
+      display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+  }
+button {
+    margin-right: 1em;
+    margin-bottom: 1em
+}
+  .game-radio-button {
+    margin: 5px
+  }

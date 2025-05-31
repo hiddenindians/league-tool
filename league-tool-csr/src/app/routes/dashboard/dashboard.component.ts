@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,19 +27,26 @@ export class DashboardComponent {
   redeemedPoints = 0;
   totalPoints = 0;
   availablePoints = 0;
-  username = "";
-  avatar = ""
-  
-  constructor(private auth: AuthService) {
-    this.auth.currentUser.subscribe((user: any) => {
-      console.log(user)
+  username = '';
+  avatar = '';
+  userSubscription: any;
+
+  constructor(private auth: AuthService) {}
+
+  ngOnInit() {
+    this.auth.reauthenticate()
+    this.userSubscription = this.auth.currentUser
+      .pipe(filter((u) => !!u))
+      .subscribe((user: any) => {
         this.redeemedPoints = user.total_redeemed || 0;
         this.totalPoints = user.total_points || 0;
         this.availablePoints = this.totalPoints - this.redeemedPoints || 0;
         this.username = user.username;
         this.avatar = user.avatar;
-    });
+      });
   }
 
-
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
+  }
 }

@@ -1,0 +1,20 @@
+{
+    "origins": [
+        "http://localhost:3040",
+        "http://localhost:4200"
+    ],
+    "host": "localhost",
+    "link_domain": "http://localhost:4200",
+
+    "mongodb": "mongodb://127.0.0.1:27017/league-tool-backend",
+    "authentication": {
+        "jwt_options": {
+            "audience": "http://yourdomain.com"
+        },
+        "oauth": {
+            "discord": {
+                "redirect_uri": "http://localhost:4200/auth/callback"
+            }
+        }
+    }
+}

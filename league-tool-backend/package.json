@@ -58,6 +58,10 @@
     "@feathersjs/socketio": "^5.0.31",
     "@feathersjs/transport-commons": "^5.0.31",
     "@feathersjs/typebox": "^5.0.31",
+    "dotenv": "^16.5.0",
+    "feathers-authentication-management": "^5.1.0",
+    "feathers-hooks-common": "^8.2.1",
+    "feathers-mailer": "^4.2.0",
     "mongodb": "^6.12.0",
     "winston": "^3.17.0"
   },

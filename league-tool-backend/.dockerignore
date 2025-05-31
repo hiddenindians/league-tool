@@ -1,0 +1,21 @@
+node_modules
+dist
+npm-debug.log
+
+# Local config & env
+.env
+.env.*.local
+
+# IDE / logs / tests
+.vscode
+.idea
+coverage
+*.log
+src/**/*.spec.ts
+src/**/*.test.ts
+
+# Docker overrides
+docker-compose.override.yml
+
+# Misc
+.DS_Store

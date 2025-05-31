@@ -8,7 +8,15 @@ export const configurationSchema = Type.Intersect([
   Type.Object({
     host: Type.String(),
     port: Type.Number(),
-    public: Type.String()
+    public: Type.String(),
+    mailgun: (Type.Object({
+      user: Type.String(),
+      pass: Type.String(),
+      port: Type.Number(),
+      host: Type.String()
+    })),
+    link_domain: Type.String(),
+    
   })
 ])
 

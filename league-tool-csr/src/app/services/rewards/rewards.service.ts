@@ -22,8 +22,24 @@ export class RewardsService {
     );
   }
 
+   getActiveRewards(): Observable<Reward[]>{
+    return this._feathers.service('rewards').watch().find({
+      query: {
+        active: true,
+      $limit: 1000, //something ridiculous so that all are loaded. might want to adjust backend to just send all.
+      $sort: {
+        points: 1
+      }}
+    }).pipe(
+      map((response: any) => response.data)
+    );
+  }
+
   createReward(reward: Reward) {
-    return this._feathers.service('rewards').create(reward)
+    if (!reward.active){
+      reward.active = false
+    }
+    return this._feathers.service('rewards').watch().create(reward)
   }
 
   updateReward(id: string, reward: Partial<Reward>){
@@ -31,6 +47,6 @@ export class RewardsService {
   }
 
   deleteReward(id: string){
-    return this._feathers.service('rewards').remove(id)
+    return this._feathers.service('rewards').watch().remove(id)
   }
 }

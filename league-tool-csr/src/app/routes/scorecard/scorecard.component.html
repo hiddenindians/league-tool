@@ -2,14 +2,14 @@
     <form [formGroup]="scoreForm" (ngSubmit)="submitForm()">
     <mat-step>
         <h1>Which game are you playing?</h1>
-        <mat-radio-group formControlName="game" aria-label="Select an option">
+        <mat-radio-group formControlName="game" class="game-radio-group" aria-label="Select an option">
             @for(game of games; track game){
-                <mat-radio-button  value="{{game._id}}">{{game.name}}</mat-radio-button>
+                <mat-radio-button class="game-radio-button" value="{{game._id}}">{{game.name}}</mat-radio-button>
 
             }
         </mat-radio-group>
         <br />
-        <button mat-button matStepperNext>Next</button>
+        <button [disabled]='scoreForm.get("game")?.value == ""' mat-flat-button matStepperNext>Next</button>
 
     </mat-step>
     <mat-step>
@@ -17,10 +17,27 @@
         <mat-form-field>
             <mat-label>Password Plz</mat-label>
             <input formControlName="password" matInput />
-
+         
         </mat-form-field>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="submitForm()">Submit</button>
+        <br />
+       
+        <button mat-flat-button matStepperPrevious>Back</button>
+        <button mat-flat-button matStepperNext [disabled]="scoreForm.invalid" (click)="submitForm()">Submit</button>
+    </mat-step>
+    <mat-step>
+            @if(error.message){
+            <h4>{{error.message}}</h4>
+            }
+            @else {
+                <h4>Thanks for playing! {{points}} points have been added to you account.</h4>
+            }
+                    <button mat-flat-button matStepperPrevious>Back</button>
+                    <br/>
+
+            <!-- <a [routerLink]="['/dashboard']">Back to the Dashboard</a> -->
+             <!-- hack to prevent duplicate code use bug. forces a fresh user object when we refresh. -->
+                        <a href="/dashboard">Back to the Dashboard</a>
+
     </mat-step>
     </form>
 </mat-stepper>

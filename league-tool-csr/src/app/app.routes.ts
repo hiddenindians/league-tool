@@ -3,95 +3,105 @@ import { AuthComponent } from './routes/auth/auth.component';
 import { DashboardComponent } from './routes/dashboard/dashboard.component';
 import { SettingsComponent } from './routes/settings/settings.component';
 import { RedeemComponent } from './routes/redeem/redeem.component';
-import { authGuardGuard } from './services/guards/auth-guard.guard';
+import { authGuard } from './services/guards/auth-guard.guard';
 import { inject } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 import { map } from 'rxjs';
 import { ScorecardComponent } from './routes/scorecard/scorecard.component';
+import { unauthGuard } from './services/guards/unauth.guard';
+import { adminGuard } from './services/guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  // { path: 'login', redirectTo: '/auth/login', pathMatch: 'full' },
-
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [() => inject(AuthService).isAuthenticated],
+    canActivate: [authGuard],
+  },
+  // Login
+  {
+    path: 'auth/login',
+    component: AuthComponent,
+    data: { authType: 'login' },
+    canActivate: [unauthGuard]
+  },
+
+  // Register
+  {
+    path: 'auth/register',
+    component: AuthComponent,
+    data: { authType: 'register' },
+    canActivate: [unauthGuard]
+  },
+
+  // Callback (OAuth)
+  {
+    path: 'auth/callback',
+    component: AuthComponent,
+    data: { authType: 'callback' },
+    canActivate: [unauthGuard]
+  },
+
+  {
+    path: 'auth/verify',
+    component: AuthComponent,
+    data: { authType: 'verify'},
+    canActivate: [unauthGuard]
   },
   {
-    path: 'auth',
-    children: [
-      {
-        path: 'register',
-        component: AuthComponent,
-        canActivate: [
-          () =>
-            inject(AuthService).isAuthenticated.pipe(
-              map((isAuth) => {
-               return !isAuth;
-              })
-            ),
-        ],
-        data: { authType: 'register' },
-      },
-      {
-        path: 'login',
-        component: AuthComponent,
-        canActivate: [
-          () =>
-            inject(AuthService).isAuthenticated.pipe(
-              map((isAuth) => {
-                console.log(isAuth)
-               return !isAuth;
-              })
-            ),
-        ],
-        data: { authType: 'login' },
-      },
-      {
-        path: 'callback',
-        component: AuthComponent,
-        canActivate: [
-          () =>
-            inject(AuthService).isAuthenticated.pipe(
-              map((isAuth) => {
-               return !isAuth;
-              })
-            ),
-        ],
-        data: { authType: 'callback' },
-      },
-    ],
-  },
+  path: 'auth/forgot-password',
+  component: AuthComponent,
+  data: { authType: 'forgot' }
+},
+{
+  path: 'auth/reset-password',
+  component: AuthComponent,
+  data: { authType: 'reset' }
+},
+
   {
     path: 'settings',
     component: SettingsComponent,
-    canActivate: [() => inject(AuthService).isAuthenticated],
+    canActivate: [authGuard],
   },
   {
     path: 'redeem',
     component: RedeemComponent,
-    canActivate: [() => inject(AuthService).isAuthenticated],
+    canActivate: [authGuard],
   },
   {
     path: 'scorecard',
     component: ScorecardComponent,
-    canActivate: [() => inject(AuthService).isAuthenticated],
+    canActivate: [authGuard],
   },
+
   {
-    path: 'admin/rewards',
-    loadComponent: () =>
-      import('./routes/admin/manage-rewards/manage-rewards.component').then(
-        (m) => m.ManageRewardsComponent
-      ),
-    canActivate: [() => inject(AuthService).isAdmin],
+    path: 'admin',
+    canActivateChild: [adminGuard],
+    children: [
+      {
+        path: 'rewards',
+        loadComponent: () =>
+          import('./routes/admin/manage-rewards/manage-rewards.component').then(
+            (m) => m.ManageRewardsComponent
+          ),
+      },
+      {
+        path: 'leagues',
+        loadComponent: () =>
+          import('./routes/admin/manage-games/manage-games.component').then(
+            (m) => m.ManageGamesComponent
+          ),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./routes/admin/manage-users/manage-users.component').then(
+            (m) => m.ManageUsersComponent
+          ),
+      },
+    ],
   },
-  {
-    path: 'admin/leagues',
-    loadComponent: () =>
-      import('./routes/admin/manage-games/manage-games.component').then(
-        (m) => m.ManageGamesComponent
-      ),
-    canActivate: [() => inject(AuthService).isAdmin],
-  },
+    { path: '**', redirectTo: '', pathMatch: 'full' }
+
 ];

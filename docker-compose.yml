@@ -1,0 +1,27 @@
+services:
+  mongo:
+    image: mongo:6
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+
+  api:
+    build:
+      context: ./league-tool-backend
+    ports:
+      - "3040:3040"
+    env_file:
+      - ./league-tool-backend/.env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+
+  web:
+    build:
+      context: ./league-tool-csr
+    ports:
+      - "4200:80"
+
+volumes:
+  mongo-data:

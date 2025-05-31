@@ -17,6 +17,10 @@
     font-weight: bold;
     color: #FFF;
   }
+
+  a {
+    color: #c9c9c9
+  }
   
   .login-subtext {
     margin-top: 20px;
@@ -65,4 +69,17 @@
 .discord-icon {
   height: 1rem;
   margin-right: 0.5rem;
+}
+
+.error-banner {
+  background: #fdecea; color: #b00020;
+  padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px;
+}
+.success-banner {
+  background: #e8f5e9; color: #2e7d32;
+  padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px;
+}
+.info-banner {
+  background: #e3f2fd; color: #1565c0;
+  padding: 0.75rem; margin-bottom: 1rem; border-radius: 4px;
 }

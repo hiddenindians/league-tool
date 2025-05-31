@@ -14,6 +14,8 @@ export const gameSchema = Type.Object(
     _id: ObjectIdSchema(),
     name: Type.String(),
     active: Type.Boolean(),
+    password: Type.Optional(Type.String()),
+    participation_points: Type.Optional(Type.Number()),
     leagues: Type.Array(Type.Object({
       _id: ObjectIdSchema(),
       name: Type.String(),
@@ -51,7 +53,8 @@ export const gameSchema = Type.Object(
       })),
     })),
     createdAt: Type.Number(),
-    updatedAt: Type.Number()
+    updatedAt: Type.Number(),
+
   },
   { $id: 'Game', additionalProperties: false }
 )
@@ -62,7 +65,7 @@ export const gameResolver = resolve<Game, HookContext<GameService>>({})
 export const gameExternalResolver = resolve<Game, HookContext<GameService>>({})
 
 // Schema for creating new entries
-export const gameDataSchema = Type.Pick(gameSchema, ['name', 'active', 'leagues'], {
+export const gameDataSchema = Type.Pick(gameSchema, ['name', 'active', 'leagues', 'participation_points'], {
   $id: 'GameData'
 })
 export type GameData = Static<typeof gameDataSchema>
@@ -86,7 +89,7 @@ export const gamePatchValidator = getValidator(gamePatchSchema, dataValidator)
 export const gamePatchResolver = resolve<Game, HookContext<GameService>>({})
 
 // Schema for allowed query properties
-export const gameQueryProperties = Type.Pick(gameSchema, ['_id', 'name'])
+export const gameQueryProperties = Type.Pick(gameSchema, ['_id', 'name', 'password'])
 export const gameQuerySchema = Type.Intersect(
   [
     querySyntax(gameQueryProperties),

@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-
+import { iff, isProvider } from 'feathers-hooks-common'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
@@ -14,12 +14,45 @@ import {
   userQueryResolver
 } from './users.schema'
 
-import type { Application } from '../../declarations'
+import type { Application, HookContext } from '../../declarations'
 import { UserService, getOptions } from './users.class'
 import { userPath, userMethods } from './users.shared'
-
+import { preventDuplicateEmails } from '../../hooks/prevent-duplicate-emails'
+import { preventDuplicateUsername } from '../../hooks/prevent-duplicate-username'
+import { addVerification, removeVerification } from 'feathers-authentication-management'
+import notifier from '../auth-management/notifier'
+import { castObjectIdFields } from '../../hooks/cast-object-id-fields'
+import { promoteFirstUser } from '../../hooks/promote-first-user'
+import { preventDuplicateBonusCode } from '../../hooks/prevent-duplicate-bonus-code'
 export * from './users.class'
 export * from './users.schema'
+
+// Helper predicate: “true if this create call is *not* coming from Discord OAuth”
+const isLocalSignup = (context: HookContext) => {
+  // 1) No discordId in the incoming data…
+  if (context.data.discordId) {
+    return false
+  }
+  // 2) And either there’s no authentication params,
+  //    or the strategy isn’t ‘discord’
+  const strategy = context.params?.authentication?.strategy
+  return strategy !== 'discord'
+}
+
+const sendVerify = () => {
+  return async (context: HookContext) => {
+    const notifiy = notifier(context.app)
+    console.log('send-notify')
+
+    const users = Array.isArray(context.result) ? context.result : [context.result]
+
+    await Promise.all(
+      users.map(async (user) => {
+        notifiy('resendVerifySignup', user)
+      })
+    )
+  }
+}
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const user = (app: Application) => {
@@ -45,12 +78,26 @@ export const user = (app: Application) => {
       all: [schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
-      patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
+      create: [
+        preventDuplicateUsername,
+        preventDuplicateEmails,
+        schemaHooks.validateData(userDataValidator),
+        schemaHooks.resolveData(userDataResolver),
+        castObjectIdFields(['applied_by', 'game_id', 'reward_id']),
+        promoteFirstUser,
+        iff(isLocalSignup, addVerification('auth-management'))
+      ],
+      patch: [
+        preventDuplicateBonusCode,
+        castObjectIdFields(['applied_by', 'game_id', 'reward_id']),
+        schemaHooks.validateData(userPatchValidator),
+        schemaHooks.resolveData(userPatchResolver)
+      ],
       remove: []
     },
     after: {
-      all: []
+      all: [],
+      create: [iff(isLocalSignup, sendVerify(), removeVerification())]
     },
     error: {
       all: []

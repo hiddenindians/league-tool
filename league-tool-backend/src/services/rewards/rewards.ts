@@ -17,17 +17,18 @@ import {
 import type { Application, HookContext } from '../../declarations'
 import { RewardService, getOptions } from './rewards.class'
 import { rewardPath, rewardMethods } from './rewards.shared'
+import { restrictToRoles } from '../../hooks/restrict-to-roles'
 
 export * from './rewards.class'
 export * from './rewards.schema'
 
-const isAdmin = async (context: HookContext) => {
-  const { user } = context.params
-  if (!user || user.role !== 'admin'){
-    throw new Error('Only administrators can perform this action')
-  }
-  return context
-}
+// const isAdmin = async (context: HookContext) => {
+//   const { user } = context.params
+//   if (!user || user.role !== 'admin'){
+//     throw new Error('Only administrators can perform this action')
+//   }
+//   return context
+// }
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const reward = (app: Application) => {
@@ -51,9 +52,9 @@ export const reward = (app: Application) => {
       all: [schemaHooks.validateQuery(rewardQueryValidator), schemaHooks.resolveQuery(rewardQueryResolver)],
       find: [],
       get: [],
-      create: [isAdmin, schemaHooks.validateData(rewardDataValidator), schemaHooks.resolveData(rewardDataResolver)],
-      patch: [isAdmin, schemaHooks.validateData(rewardPatchValidator), schemaHooks.resolveData(rewardPatchResolver)],
-      remove: [isAdmin]
+      create: [  restrictToRoles('admin'), schemaHooks.validateData(rewardDataValidator), schemaHooks.resolveData(rewardDataResolver)],
+      patch: [  restrictToRoles('admin'), schemaHooks.validateData(rewardPatchValidator), schemaHooks.resolveData(rewardPatchResolver)],
+      remove: [  restrictToRoles('admin')]
     },
     after: {
       all: []

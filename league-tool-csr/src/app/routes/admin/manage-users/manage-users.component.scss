@@ -1,0 +1,78 @@
+.manage-users-card {
+  background: inherit;
+  color: #fff;
+}
+
+/* Common row styling */
+.row {
+  display: flex;
+  align-items: center;
+}
+
+/* Space icon + text */
+.user-header mat-icon {
+  margin-right: 0.5rem;
+  flex: 0 0 auto;
+}
+
+/* Username bold */
+.username {
+  font-weight: 600;
+}
+
+/* Small indent for email and actions */
+.user-email,
+.user-actions {
+  margin-left: 2.5rem;  /* align under the icon */
+}
+
+/* Gap between action items */
+.user-actions {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Edit container styling */
+.edit-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Input width */
+.points-edit {
+  width: 100px;
+}
+
+/* List‐item spacing */
+.user-item {
+  display: block;    /* block so rows stack by default */
+  padding: 0.75rem 1rem;
+}
+
+/* Desktop: single row two columns */
+@media (min-width: 600px) {
+  .user-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .user-header,
+  .user-email {
+    margin-left: 0;  /* inline in first column */
+  }
+  .user-header {
+    flex: 1 1 auto;
+  }
+  .user-email {
+    flex: 1 1 auto;
+    padding-left: 1rem;
+  }
+  .user-actions {
+    margin-left: auto;
+  }
+}
+
+mat-list-item {
+  height: auto !important
+}

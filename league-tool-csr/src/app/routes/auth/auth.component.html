@@ -1,49 +1,187 @@
 <mat-card class="login-card">
-    <mat-card-header class="login-header">
-      <h1 class="login-title">{{ title }}</h1>
-    </mat-card-header>
-    <mat-card-content>  
-        <form [formGroup]="authForm" (ngSubmit)="submitForm()">
-            @if(authType === 'register') {<mat-form-field appearance="outline">
-              <mat-label>Username</mat-label>
-              <input matInput formControlName="username" placeholder="Username" />
-            </mat-form-field>}
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" placeholder="Email" />
-          </mat-form-field>
-          
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password" placeholder="Password" type="password" />
-          </mat-form-field>
+  <mat-card-header class="login-header">
+    <h1 class="login-title">{{ title }}</h1>
+  </mat-card-header>
 
-          <button mat-raised-button color="primary" [disabled]="!authForm.valid" type="submit">
-            {{ title }}
-          </button>
-        </form>
-        <div class="social-login">
-          <button mat-raised-button class="discord-button" (click)="loginWithDiscord()">
-            <img src="discord_logo.png" alt="Discord" class="discord-icon">
-            Continue with Discord
-          </button>
+  <mat-card-content>
+    <!-- Global error banner -->
+    @if (errors.message) {
+      <div class="error-banner">{{ errors.message }}</div>
+    }
+
+    <!-- VERIFY MODE -->
+    @if (authType === 'verify') {
+      @if (isSubmitting) {
+        <div class="info-banner">Verifying email…</div>
+      } @else if (!isSubmitting && !errors.message) {
+        <div class="success-banner">
+          Your email has been verified! <a routerLink="/auth/login">Sign in</a>
         </div>
+      }
+    }
 
-    </mat-card-content>
-    <mat-card-footer>
-      <p class="login-subtext">
-        <ng-container *ngIf="authType === 'register'">
-          <a [routerLink]="['/auth/login']">Have an account?</a>
-        </ng-container>
-        <ng-container *ngIf="authType === 'login'">
-          <a [routerLink]="['/auth/register']">Need an account?</a>
-        </ng-container>
-      </p>
-    </mat-card-footer>
+    <!-- FORGOT PASSWORD MODE -->
+    @else if (authType === 'forgot') {
+      <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="you@example.com" />
+          @if (authForm.get('email')?.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (authForm.get('email')?.hasError('email')) {
+            <mat-error>Must be a valid email</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="authForm.invalid || isSubmitting"
+        >
+          Send Reset Link
+        </button>
+      </form>
+
+      @if (sent) {
+        <div class="success-banner">
+          If that email exists, you’ll receive a reset link shortly.
+        </div>
+      }
+    }
+
+    <!-- RESET PASSWORD MODE -->
+    @else if (authType === 'reset') {
+      <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>New Password</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="resetPassword"
+            placeholder="Enter new password"
+          />
+          @if (authForm.get('resetPassword')?.hasError('required')) {
+            <mat-error>Password is required</mat-error>
+          }
+          @if (authForm.get('resetPassword')?.hasError('minlength')) {
+            <mat-error>Minimum 6 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="authForm.invalid || isSubmitting"
+        >
+          Reset Password
+        </button>
+      </form>
+
+      @if (success) {
+        <div class="success-banner">
+          Password reset! You can now <a routerLink="/auth/login">sign in</a>.
+        </div>
+      }
+    }
+
+    <!-- LOGIN / REGISTER / SOCIAL LOGIN MODE -->
+    @else {
+      <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+        <!-- Username on register -->
+        @if (authType === 'register') {
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <input
+              matInput
+              formControlName="username"
+              placeholder="Username"
+            />
+            @if (authForm.get('username')?.hasError('required')) {
+              <mat-error>Username is required</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Email"
+          />
+          @if (authForm.get('email')?.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (authForm.get('email')?.hasError('email')) {
+            <mat-error>Must be a valid email</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            placeholder="Password"
+          />
+          @if (authForm.get('password')?.hasError('required')) {
+            <mat-error>Password is required</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="authForm.invalid || isSubmitting"
+        >
+          {{ title }}
+        </button>
+      </form>
+
+      <div class="social-login">
+        <button
+          mat-raised-button
+          class="discord-button"
+          (click)="loginWithDiscord()"
+        >
+          <img
+            src="discord_logo.png"
+            alt="Discord"
+            class="discord-icon"
+          />
+          Continue with Discord
+        </button>
+      </div>
+    }
+  </mat-card-content>
+
+  <mat-card-footer>
+    <p class="login-subtext">
+      @if (authType === 'register') {
+        <a [routerLink]="['/auth/login']">Have an account?</a>
+      } @else if (authType === 'login') {
+        <a [routerLink]="['/auth/register']">Need an account?</a>
+        <br/>
+        <a [routerLink]="['/auth/forgot-password']">Forgot your password?</a>
+      } @else if (authType === 'forgot') {
+        <a [routerLink]="['/auth/login']">Back to login</a>
+      } @else {
+        <!-- no footer link for reset -->
+      }
+    </p>
+  </mat-card-footer>
 </mat-card>
-@if(isDiscordAuthenticating){
-<div class="loading-spinner">
-  <!-- Add your loading spinner here -->
-  Authenticating with Discord...
-</div>
+
+@if (isDiscordAuthenticating) {
+  <div class="loading-spinner">
+    Authenticating with Discord…
+  </div>
 }

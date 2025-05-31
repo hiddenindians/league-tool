@@ -6,36 +6,47 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
-  imports: [MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule],
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSlideToggleModule,
+  ],
   templateUrl: './settings.component.html',
-  styleUrl: './settings.component.scss'
+  styleUrl: './settings.component.scss',
 })
 export class SettingsComponent {
   userSubscription: any;
-  username: string = ""
-  email: string = ""
-  id: string = ""
+  username: string = '';
+  email: string = '';
+  id: string = '';
 
-  constructor(private auth: AuthService, private user: UserService) {
-
-  }
+  constructor(private auth: AuthService, private user: UserService) {}
 
   ngOnInit() {
-    this.userSubscription = this.auth.currentUser.subscribe((user: any) => {
-      this.username = user.username;
-      this.email = user.email;
-      this.id = user._id
-    })
+    this.userSubscription = this.auth.currentUser
+      .pipe(filter((u) => !!u))
+      .subscribe((user: any) => {
+        this.username = user.username;
+        this.email = user.email;
+        this.id = user._id;
+      });
   }
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
 
-  updateUsername(username: string){
-    this.user.updateUsername(this.id, username)
+  updateUsername(username: string) {
+    this.user.updateUsername(this.id, username);
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

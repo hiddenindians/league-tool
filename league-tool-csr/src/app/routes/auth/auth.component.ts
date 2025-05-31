@@ -13,7 +13,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { Errors } from '../../shared/models/errors.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../services/auth/auth.service';
@@ -22,12 +21,21 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { FeathersService } from '@feathersjs/feathers';
-import { delay, filter, finalize, map, switchMap, take } from 'rxjs';
+import {
+  delay,
+  filter,
+  finalize,
+  map,
+  Observable,
+  switchMap,
+  take,
+} from 'rxjs';
 
 interface AuthForm {
-  email: FormControl;
-  password: FormControl;
+  email?: FormControl;
+  password?: FormControl;
   username?: FormControl;
+  resetPassword?: FormControl;
 }
 
 @Component({
@@ -35,7 +43,6 @@ interface AuthForm {
   standalone: true,
   imports: [
     RouterLink,
-    NgIf,
     ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -48,11 +55,14 @@ interface AuthForm {
 export class AuthComponent implements OnInit {
   authType: String = '';
   title: String = '';
-  errors: Errors = { errors: {} };
+  errors: Errors = { message: '', errors: {} };
   isSubmitting: Boolean = false;
   authForm: FormGroup<AuthForm>;
   destroyRef = inject(DestroyRef);
   isDiscordAuthenticating = false;
+  token: string | null = null;
+  sent: boolean = false;
+  success: boolean = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -61,19 +71,18 @@ export class AuthComponent implements OnInit {
   ) {
     this.authForm = new FormGroup<AuthForm>({
       email: new FormControl('', {
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.email],
         nonNullable: true,
       }),
       password: new FormControl('', {
-        validators: [Validators.required],
+        validators: [Validators.required, Validators.minLength(8)],
         nonNullable: true,
       }),
     });
 
-    const token = this.route.snapshot.queryParamMap.get('code');
-    console.log(token);
-    if (token) {
-      this.handleDiscordCallback(token);
+    this.token = this.route.snapshot.queryParamMap.get('code');
+    if (this.token) {
+      this.handleDiscordCallback(this.token);
     }
   }
 
@@ -82,20 +91,65 @@ export class AuthComponent implements OnInit {
     this.route.data.subscribe((data) => {
       this.authType = data['authType'];
 
-      if (this.authType.includes('callback')) {
-        console.log('callback');
-        return;
-      }
+      switch (this.authType) {
+        case 'forgot':
+          this.title = 'Forgot Password';
+          this.authForm = new FormGroup<AuthForm>({
+            email: new FormControl('', [Validators.required, Validators.email]),
+          });
+          break;
+        case 'reset':
+          this.title = 'Reset Password';
+          this.token = this.route.snapshot.queryParamMap.get('token') || '';
+          if (!this.token) {
+            this.errors = { message: 'Missing reset token', errors: {} };
+          } else {
+            this.authForm = new FormGroup<AuthForm>({
+              resetPassword: new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+              ]),
+            });
+          }
+          break;
+        case 'callback':
+          return;
+        case 'verify':
+          this.token =
+            this.route.snapshot.queryParamMap.get('token') || ('' as string);
 
-      console.log(this.authType);
-      this.title = this.authType === 'login' ? 'Sign in' : 'Sign up';
+          if (!this.token) {
+            this.errors = { message: 'Missing verification token', errors: {} };
+          } else {
+            this.isSubmitting = true;
 
-      // Add form control for username if this is the register page
-      if (this.authType === 'register') {
-        this.authForm.addControl(
-          'username',
-          new FormControl('', Validators.required)
-        );
+            this.userService
+              .verifyToken(this.token)
+              .pipe(takeUntilDestroyed(this.destroyRef))
+              .subscribe({
+                next: () => {
+                  this.title = 'Email Verified!';
+                  this.isSubmitting = false;
+                },
+                error: (err: any) => {
+                  this.errors = {
+                    message: err.message || 'Verification failed',
+                    errors: err.errors || {},
+                  };
+                  this.isSubmitting = false;
+                },
+              });
+          }
+          return;
+        case 'register':
+          this.title = 'Sign Up';
+          this.authForm.addControl(
+            'username',
+            new FormControl('', Validators.required)
+          );
+          break;
+        case 'login':
+          this.title = 'Sign In';
       }
     });
   }
@@ -105,7 +159,6 @@ export class AuthComponent implements OnInit {
   }
 
   private handleDiscordCallback(token: string): void {
-    console.log(token);
     this.isDiscordAuthenticating = true;
     this.userService
       .handleDiscordCallback(token)
@@ -124,22 +177,32 @@ export class AuthComponent implements OnInit {
   }
   submitForm(): void {
     this.isSubmitting = true;
-    this.errors = { errors: {} };
+    this.errors = { message: '', errors: {} };
 
-    let observable =
-      this.authType === 'login'
-        ? this.userService.logIn(
-            this.authForm.value as { email: string; password: string }
-          )
-        : this.userService.signUp(
-            this.authForm.value as {
-              username: string;
-              email: string;
-              password: string;
-            }
-          );
+    let observable: Observable<any>;
 
-    observable.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    if (this.authType === 'login') {
+      observable = this.userService.logIn(
+        this.authForm.value as { email: string; password: string }
+      );
+    } else if (this.authType === 'register') {
+      observable = this.userService.signUp(
+        this.authForm.value as {
+          username: string;
+          email: string;
+          password: string;
+        }
+      );
+    } else if (this.authType === 'forgot') {
+      observable = this.userService.forgotPassword(this.authForm.value.email);
+    } else if (this.authType === 'reset') {
+      observable = this.userService.resetPassword(
+        this.token as string,
+        this.authForm.value.resetPassword
+      );
+    }
+
+    observable!.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.router.navigate(['/dashboard']);
       },

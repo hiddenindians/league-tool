@@ -1,20 +1,21 @@
 {
-  "host": "localhost",
   "port": 3040,
   "public": "./public/",
-  "origins": [
-    "http://localhost:3030", 
-    "http://localhost:4200"
-  ],
   "paginate": {
     "default": 10,
     "max": 50
   },
-  "mongodb": "mongodb://127.0.0.1:27017/league-tool-backend",
+  "mailgun": {
+    "host": null,
+    "port": null,
+    "secure": "SSL",
+    "user": null,
+    "pass": null
+  },
   "authentication": {
     "entity": "user",
     "service": "users",
-    "secret": "qPkHMGFFURkFEydA0ixfy3eY30/KaOLl",
+    "secret": null,
     "authStrategies": [
       "jwt",
       "local",
@@ -24,7 +25,6 @@
       "header": {
         "typ": "access"
       },
-      "audience": "https://yourdomain.com",
       "algorithm": "HS256",
       "expiresIn": "1d"
     },
@@ -34,10 +34,10 @@
     },
     "oauth": {
       "discord": {
-        "key": "1305372670334079046",
-        "secret": "TRVbyguRp3mahPR63OeqHNmd80nmV_Cr",
+        "client_id": null,
+        "secret": null,
         "scope": ["identify", "email"],
-        "redirect_uri": "http://localhost:4200/auth/callback"
+        "redirect_uri": null
       }
     }
   }

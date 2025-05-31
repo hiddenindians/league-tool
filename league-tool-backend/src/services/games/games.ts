@@ -13,7 +13,7 @@ import {
   gamePatchResolver,
   gameQueryResolver
 } from './games.schema'
-
+import { restrictToRoles } from '../../hooks/restrict-to-roles'
 import type { Application, HookContext } from '../../declarations'
 import { GameService, getOptions } from './games.class'
 import { gamePath, gameMethods } from './games.shared'
@@ -21,13 +21,13 @@ import { gamePath, gameMethods } from './games.shared'
 export * from './games.class'
 export * from './games.schema'
 
-const isAdmin = async (context: HookContext) => {
-  const { user } = context.params
-  if (!user || user.role !== 'admin') {
-    throw new Error('Only administrators can perform this action')
-  }
-  return context
-}
+// const isAdmin = async (context: HookContext) => {
+//   const { user } = context.params
+//   if (!user || user.role !== 'admin') {
+//     throw new Error('Only administrators can perform this action')
+//   }
+//   return context
+// }
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const game = (app: Application) => {
@@ -52,16 +52,16 @@ export const game = (app: Application) => {
       find: [],
       get: [],
       create: [
-        isAdmin,
+          restrictToRoles('admin'),
         schemaHooks.validateData(gameDataValidator),
         schemaHooks.resolveData(gameDataResolver)
       ],
       patch: [
-        isAdmin,
+        restrictToRoles('admin'),
         schemaHooks.validateData(gamePatchValidator),
         schemaHooks.resolveData(gamePatchResolver)
       ],
-      remove: [isAdmin]
+      remove: [restrictToRoles('admin')]
     },
     after: {
       all: []

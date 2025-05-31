@@ -19,6 +19,7 @@ export class GameService {
       name: game.name,
       active: game.active,
       leagues: game.leagues,
+      participation_points: 0
     });
   }
 
@@ -26,7 +27,7 @@ export class GameService {
     return this._feathers.service('games').patch(id, patchBody);
   }
 
-  getGame(gameId: string){
+  getGame(gameId: string): Observable<Game>{
     return this._feathers
     .service('games')
     .watch()

@@ -10,9 +10,9 @@
         <p>points available</p>
         <p>{{totalPoints}} earned | {{redeemedPoints}} used</p>
         </div>
-      <div>
+      <div class='dashboard-button-container'>
         <a [routerLink]="['/scorecard']"><button mat-raised-button color="primary" class="dashboard-button">Enter Score</button></a>
        <a [routerLink]="['/redeem']"><button mat-raised-button color="accent" class="dashboard-button">Redeem Points</button></a>
-       <a [routerLink]="['/settings']"><button mat-raised-button color="warn" class="dashboard-button">Manage Games</button></a>
+       <!-- <a [routerLink]="['/settings']"><button mat-raised-button color="warn" class="dashboard-button">Manage Games</button></a> -->
       </div>
     </mat-card>
