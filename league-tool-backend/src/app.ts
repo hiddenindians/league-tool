@@ -88,27 +88,12 @@ app.use(bodyParser())
 // Configure services and transports
 // 2) **New**: Koa middleware to clear the OAuth cookies
 app.use(async (ctx, next) => {
-  if (ctx.method === 'DELETE' && ctx.path === '/authentication') {
-    const isProd = process.env.NODE_ENV === 'production';
-    ctx.cookies.set('feathers-oauth', '', {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: 'none',
-      expires: new Date(0),
-      overwrite: true,
-      path: '/'
-    })
-    ctx.cookies.set('feathers-oauth.sig', '', {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: 'none',
-      expires: new Date(0),
-      overwrite: true,
-      path: '/'
-    })
-    console.log('[Koa middleware] Cleared feathers-oauth cookies')
-            console.log('[Outgoing headers]', ctx.response.headers['set-cookie']);
+  if (ctx.method === 'GET' && ctx.path === '/oauth/discord') {
+        console.log("cookies: ", ctx.req.headers.cookie)
 
+  delete (ctx.req.headers as any).cookie
+    console.log('[Cookie Strip] Removed feathers-oauth from incoming headers')
+    console.log("cookies: ", ctx.req.headers.cookie)
   }
   return next()
 })
