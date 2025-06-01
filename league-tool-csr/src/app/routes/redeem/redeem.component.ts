@@ -32,135 +32,7 @@ export class RedeemComponent {
   lowestRedeemable = 0;
   expiryTime: string = ""
   expiryDate: string = ""
-
-  // rewards = [
-  //   {
-  //     title: "Canned Pop (355ml)",
-  //     points: 3,
-  //     description: "Redeem 3 Points for this reward",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "GameGenic Sideholder",
-  //     points: 5,
-  //     description: "Redeem 5 Points for this reward",
-  //     type: "acessory"
-  //   },
-  //   {
-  //     title: "Bottle Pop (710ml)",
-  //     points: 5,
-  //     description: "Redeem 3 Points for this reward",
-  //     type: "drink"
-  //   },
-  //   {
-  //     title: "Bag of Chips (66g)",
-  //     points: 5,
-  //     description: "Redeem 5 Points for this reward",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "Chocolate Bar",
-  //     points: 5,
-  //     description: "Redeem 5 Points for this reward",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "Card Dividers",
-  //     points: 5,
-  //     description: "Redeem 5 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "Bag of Candy (160g/180g)",
-  //     points: 10,
-  //     description: "Redeem 5 Points for this reward",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "Inner Sleeves",
-  //     points: 10,
-  //     description: "Redeem 10 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "Energy Drink (Except Red Bull)",
-  //     points: 10,
-  //     description: "Redeem 10 Points for this reward",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "Red Bull",
-  //     points: 15,
-  //     description: "Redeem 15 Points for this reward",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "Bag of Jerky (80g)",
-  //     points: 15,
-  //     description: "Redeem 15 Points for this reward.",
-  //     type: "food"
-  //   },
-  //   {
-  //     title: "Booster Pack [Any Game] ($9 value maximum)",
-  //     points: 15,
-  //     description: "Redeem 15 Points for this reward.",
-  //     type: "booster pack"
-  //   },
-  //   {
-  //     title: "Lorcana Sleeves",
-  //     points: 20,
-  //     description: "Redeem 20 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "GameGenic Outer Sleeves",
-  //     points: 30,
-  //     description: "Redeem 30 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "One Piece Art Sleeves",
-  //     points: 30,
-  //     description: "Redeem 30 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "GameGenic Outer Sleeves",
-  //     points: 30,
-  //     description: "Redeem 30 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "Dragon Shield Dual Matte Outer Sleeves",
-  //     points: 35,
-  //     description: "Redeem 35 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "36d6 Dice Block",
-  //     points: 40,
-  //     description: "Redeem 40 Points for this reward",
-  //     type: "accessory"
-  //   },
-  //   {
-  //     title: "Collector Booster ($32 value maximum)",
-  //     points: 75,
-  //     description: "Redeem 75 Points for this reward",
-  //     type: "booster pack"
-  //   },
-  //   {
-  //     title: "Collector Booster ($45 value maximum)",
-  //     points: 95,
-  //     description: "Redeem 95 Points for this reward",
-  //     type: "booster pack"
-  //   },
-
-  // ]
-
   rewards: Reward[] = []
-
-
-
 
   constructor(private rewardsService: RewardsService, private auth: AuthService, private user: UserService, private dialog: MatDialog) {
     this.auth.currentUser.subscribe((user: any) => {
@@ -194,7 +66,7 @@ export class RedeemComponent {
   redeemRewards(){
     
     this.user.updateRedeemedPoints(this.currentUserId, this.redeemedPoints + Array.from(this.selectedRewards).reduce((sum, r: any) => sum + r.points, 0))
-      .subscribe(()=> {
+      .then(()=> {
             this.user.updateRedemptionLog(this.currentUserId, this.selectedRewards)
       })
       .catch((err:any)=> {

@@ -2,11 +2,19 @@
   @if(!isConfirmationPage){
   <mat-card class="header">
     <mat-card-title>Choose your rewards</mat-card-title>
-    <mat-card-subtitle
-      >You have <strong>{{ remainingPoints }}</strong> points
-      available.</mat-card-subtitle
-    >
+    <mat-card-subtitle>
+      You have <strong>{{ remainingPoints }}</strong> points available.
+    </mat-card-subtitle>
   </mat-card>
+
+  @if(!rewards.length){
+  <mat-card>
+    <mat-card-content>
+      <p>No rewards available at this time.</p>
+    </mat-card-content>
+  </mat-card>
+  }
+
   @for(reward of rewards; track reward._id){
   <mat-card class="reward" style="margin-bottom: 16px">
     <mat-card-content>
@@ -16,7 +24,6 @@
           [disabled]="isCheckboxDisabled(reward)"
           style="margin-right: 16px"
         ></mat-checkbox>
-        <!-- <mat-icon style="font-size: 50px; margin-right: 16px">image</mat-icon> -->
         <div style="flex-grow: 1">
           <h3 class="reward-title">{{ reward.title }}</h3>
           <p class="reward-points">
@@ -32,16 +39,30 @@
                 : 'danger-bar'
             "
           >
-            ></mat-progress-bar
-          >
+          </mat-progress-bar>
         </div>
       </div>
     </mat-card-content>
   </mat-card>
   }
-}
+
+  <mat-card class="sticky-footer">
+    <div class="info">
+      Selected Rewards: <strong>{{ selectedRewards.size }}</strong> | Will Redeem <strong>{{ toRedeem }}</strong> Points
+    </div>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="confirmRedemptionDialog()"
+      [disabled]="availablePoints - toRedeem < 0"
+    >
+      Redeem
+    </button>
+  </mat-card>
+  }
+
   @if(isConfirmationPage){
-    <div class="confirmation-page" >
+    <div class="confirmation-page">
       <h2>Redemption Successful</h2>
       <p>You have successfully redeemed the following rewards:</p>
       <ul>
@@ -54,35 +75,16 @@
         <li>Show this confirmation page at the register.</li>
         <li>Claim your rewards.</li>
       </ol>
-      <p class="expiry">This redemption will expire on <strong>{{ expiryDate }}</strong> at <strong>{{ expiryTime }}</strong>.</p>
+      <p class="expiry">
+        This redemption will expire on <strong>{{ expiryDate }}</strong> at <strong>{{ expiryTime }}</strong>.
+      </p>
 
       <div class="confirmation-buttons">
-       <a [routerLink]="['/dashboard']"><button mat-raised-button color="primary">Go to Dashboard</button></a>
+        <a [routerLink]="['/dashboard']">
+          <button mat-raised-button color="primary">Go to Dashboard</button>
+        </a>
         <button mat-raised-button color="accent" (click)="claimMoreRewards()">Claim More Rewards</button>
       </div>
     </div>
   }
 </div>
-@if(!isConfirmationPage){
-  <mat-card class="sticky-footer">
-    <div class="info">
-      Selected Rewards: <strong>{{ selectedRewards.size }}</strong> | Will Redeem <strong>{{ toRedeem }}</strong> Points
-    </div>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="confirmRedemptionDialog()"
-      disabled="{{ availablePoints - toRedeem < 0 }}"
-    >
-      Redeem
-    </button>
-  </mat-card>
-}
-  @if(!rewards.length){
-  <mat-card>
-    <mat-card-content>
-      <p>No rewards available at this time.</p>
-    </mat-card-content>
-  </mat-card>
-  }
- 

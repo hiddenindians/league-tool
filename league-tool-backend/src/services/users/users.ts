@@ -24,6 +24,7 @@ import notifier from '../auth-management/notifier'
 import { castObjectIdFields } from '../../hooks/cast-object-id-fields'
 import { promoteFirstUser } from '../../hooks/promote-first-user'
 import { preventDuplicateBonusCode } from '../../hooks/prevent-duplicate-bonus-code'
+import { notifyUserRedemption } from '../../hooks/notify-user-redemption'
 export * from './users.class'
 export * from './users.schema'
 
@@ -88,6 +89,7 @@ export const user = (app: Application) => {
         iff(isLocalSignup, addVerification('auth-management'))
       ],
       patch: [
+        notifyUserRedemption,
         preventDuplicateBonusCode,
         castObjectIdFields(['applied_by', 'game_id', 'reward_id']),
         schemaHooks.validateData(userPatchValidator),
