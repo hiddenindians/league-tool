@@ -11,7 +11,6 @@ import { UserService } from '../../services/user/user.service';
 import { RedemptionDialogComponent } from './redemption-dialog/redemption-dialog.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FeathersService } from '../../services/api/feathers.service';
 import { RewardsService } from '../../services/rewards/rewards.service';
 import { Reward } from '../../shared/models/reward.model';
 @Component({
