@@ -47,7 +47,6 @@ export class DiscordStrategy extends OAuthStrategy {
 
     // Clear relevant cookies before starting a new OAuth request
     const res = authResult?.response
-    console.log("authResult:" + authResult)
     if (res?.clearCookie) {
       res.clearCookie('feathers-jwt')
       res.clearCookie('connect.sid')
@@ -70,7 +69,7 @@ export class DiscordStrategy extends OAuthStrategy {
       const { data } = await axios(userOptions)
       return data
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

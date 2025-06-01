@@ -78,6 +78,12 @@
       <p class="expiry">
         This redemption will expire on <strong>{{ expiryDate }}</strong> at <strong>{{ expiryTime }}</strong>.
       </p>
+      @if(generatedCode){
+        <div class="qr-section">
+          <h3>Validation Code</h3>
+          <qrcode [qrdata]="qrData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+        </div>
+      }
 
       <div class="confirmation-buttons">
         <a [routerLink]="['/dashboard']">

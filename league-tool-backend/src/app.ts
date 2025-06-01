@@ -31,7 +31,6 @@ let authRateLimit: any;
       await redis.ping();
       rateLimitStore = redis;
       driver = 'redis';
-      console.log('[RateLimit] Using Redis backend');
     } else {
       throw new Error('Skip Redis in development');
     }
@@ -80,7 +79,6 @@ app.use(async (ctx, next) => {
   return next();
 })
 
-console.log('allowed origins:', app.get('origins'));
 //app.use(serveStatic(app.get('public')))
 app.use(errorHandler())
 app.use(parseAuthentication())
@@ -89,11 +87,8 @@ app.use(bodyParser())
 // 2) **New**: Koa middleware to clear the OAuth cookies
 app.use(async (ctx, next) => {
   if (ctx.method === 'GET' && ctx.path === '/oauth/discord') {
-        console.log("cookies: ", ctx.req.headers.cookie)
 
   delete (ctx.req.headers as any).cookie
-    console.log('[Cookie Strip] Removed feathers-oauth from incoming headers')
-    console.log("cookies: ", ctx.req.headers.cookie)
   }
   return next()
 })

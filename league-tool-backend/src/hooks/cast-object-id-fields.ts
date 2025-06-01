@@ -5,7 +5,6 @@ export const castObjectIdFields = (fields: string[]) => {
   return async (context: HookContext) => {
     const data = context.data;
     if (!data || typeof data !== 'object') {
-      console.log('[castObjectIdFields] No data object found in context.');
       return context;
     }
 
@@ -16,13 +15,11 @@ export const castObjectIdFields = (fields: string[]) => {
         /^[a-f\d]{24}$/i.test(value)
       ) {
         target[field] = new ObjectId(value);
-        console.log(`[castObjectIdFields] Converted ${scope}.${field} to ObjectId(${value})`);
       } else if (value !== undefined) {
         console.log(`[castObjectIdFields] Skipped ${scope}.${field}: Not a valid ObjectId string`, value);
       }
     };
 
-    console.log('[castObjectIdFields] Incoming data:', JSON.stringify(data, null, 2));
 
     // Check top-level fields
     for (const field of fields) {

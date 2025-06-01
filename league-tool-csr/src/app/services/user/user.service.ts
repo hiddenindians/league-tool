@@ -25,14 +25,21 @@ export class UserService {
     });
   }
 
-  addToTotalPoints(id: string, amount: number){
-    console.log(id, ' ', amount)
+  addToTotalPoints(id: string, amount: number) {
+    console.log(id, ' ', amount);
     return this._feathers.service('users').patch(id, {
-      $inc: { total_points: amount }
-    })
+      $inc: { total_points: amount },
+    });
   }
 
-  updateBonusCodesUsed(id: string, code: string, points: number, source: string, gameId: string, applied_by: string){
+  updateBonusCodesUsed(
+    id: string,
+    code: string,
+    points: number,
+    source: string,
+    gameId: string,
+    applied_by: string
+  ) {
     return this._feathers.service('users').patch(id, {
       $push: {
         bonus_codes_used: {
@@ -41,10 +48,10 @@ export class UserService {
           date: Date.now(),
           source: source,
           game_id: gameId,
-          applied_by: applied_by
-        }
-      }
-    })
+          applied_by: applied_by,
+        },
+      },
+    });
   }
 
   updateRedeemedPoints(id: string, points: number) {
@@ -55,20 +62,26 @@ export class UserService {
 
   updateRedemptionLog(id: string, redemptions: Set<any>) {
     const array = Array.from(redemptions).map((reward) => {
-      const {points, title} = reward
+      const { points, title } = reward;
       return {
         reward_id: reward._id,
         reward: title,
         points_redeemed: points,
-        date: Date.now()
-      }
-    })
-    return this._feathers.service('users').patch(id, {
-      $push: {
-        redemptions: {
-          $each: array,
-        },
-      },
+        date: Date.now(),
+      };
     });
+    return this._feathers
+      .service('users')
+      .patch(id, {
+        $push: {
+          redemptions: {
+            $each: array,
+          },
+        },
+      })
+      .then((updatedUser: any) => {
+        this.userUpdateSubject.next(updatedUser);
+        return updatedUser;
+      });
   }
 }

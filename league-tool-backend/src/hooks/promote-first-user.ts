@@ -6,7 +6,6 @@ export const promoteFirstUser = async (context: HookContext) => {
 
   if (users.length === 0) {
     context.data.role = 'admin'
-    console.log('👑 Promoting first user to admin:', context.data.email)
   }
   return context
 }

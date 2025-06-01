@@ -2,7 +2,6 @@ import { HookContext } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 
 export const preventDuplicateBonusCode = async (context: HookContext) => {
-  console.log("running preventdupes")
   const {data, app } = context
   const user = context.arguments[0]
 

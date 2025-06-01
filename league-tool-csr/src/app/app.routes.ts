@@ -10,6 +10,7 @@ import { map } from 'rxjs';
 import { ScorecardComponent } from './routes/scorecard/scorecard.component';
 import { unauthGuard } from './services/guards/unauth.guard';
 import { adminGuard } from './services/guards/admin.guard';
+import { VerifyComponent } from './routes/verify/verify.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -52,6 +53,10 @@ export const routes: Routes = [
   path: 'auth/forgot-password',
   component: AuthComponent,
   data: { authType: 'forgot' }
+},
+{
+  path: 'verify/:code',
+  component: VerifyComponent,
 },
 {
   path: 'auth/reset-password',

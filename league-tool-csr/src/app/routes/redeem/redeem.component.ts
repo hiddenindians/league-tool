@@ -13,9 +13,10 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { RewardsService } from '../../services/rewards/rewards.service';
 import { Reward } from '../../shared/models/reward.model';
+import { QRCodeComponent } from 'angularx-qrcode'
 @Component({
   selector: 'app-redeem',
-  imports: [RouterLink, CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule], 
+  imports: [ QRCodeComponent, RouterLink, CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule], 
   templateUrl: './redeem.component.html',
   styleUrl: './redeem.component.scss'
 })
@@ -32,6 +33,8 @@ export class RedeemComponent {
   expiryTime: string = ""
   expiryDate: string = ""
   rewards: Reward[] = []
+  generatedCode: string | null = null
+  qrData: string = ''
 
   constructor(private rewardsService: RewardsService, private auth: AuthService, private user: UserService, private dialog: MatDialog) {
     this.auth.currentUser.subscribe((user: any) => {
@@ -40,6 +43,13 @@ export class RedeemComponent {
       this.totalPoints = user.total_points || 0;
       this.availablePoints = this.totalPoints - this.redeemedPoints || 0;
       this.remainingPoints = this.availablePoints
+    })
+
+    this.user.userUpdates.subscribe((updatedUser: any) => {
+      if (updatedUser && updatedUser.generatedCode){
+        this.generatedCode = updatedUser.generatedCode
+        this.qrData = `https://play.shopnekos.ca/verify/${this.generatedCode}`
+      }
     })
 
     this.rewardsService.getActiveRewards().subscribe((rewards: any) => {
@@ -66,13 +76,15 @@ export class RedeemComponent {
     
     this.user.updateRedeemedPoints(this.currentUserId, this.redeemedPoints + Array.from(this.selectedRewards).reduce((sum, r: any) => sum + r.points, 0))
       .then(()=> {
-            this.user.updateRedemptionLog(this.currentUserId, this.selectedRewards)
+           return this.user.updateRedemptionLog(this.currentUserId, this.selectedRewards)
+      }).then ((updatedUser: any) => {
+        console.log(updatedUser)
+        this.setExpiryTime()
+        this.isConfirmationPage = true
       })
       .catch((err:any)=> {
         console.log(err)
       })
-    this.setExpiryTime()
-    this.isConfirmationPage = true
   }
 
 

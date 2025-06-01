@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { codesClient } from './services/codes/codes.shared'
+export type { Codes, CodesData, CodesQuery, CodesPatch } from './services/codes/codes.shared'
+
 import { mailerClient } from './services/mailer/mailer.shared'
 export type { Mailer, MailerData, MailerQuery, MailerPatch } from './services/mailer/mailer.shared'
 
@@ -56,5 +59,6 @@ export const createClient = <Configuration = any,>(
   client.configure(rewardClient)
   client.configure(authManagementClient)
   client.configure(mailerClient)
+  client.configure(codesClient)
   return client
 }

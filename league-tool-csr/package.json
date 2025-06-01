@@ -24,6 +24,7 @@
     "@feathersjs/authentication-oauth": "^5.0.31",
     "@feathersjs/feathers": "^5.0.31",
     "@feathersjs/socketio-client": "^5.0.31",
+    "angularx-qrcode": "^19.0.0",
     "axios": "^1.7.9",
     "feathers-reactive": "^0.11.0",
     "random-word-slugs": "^0.1.7",

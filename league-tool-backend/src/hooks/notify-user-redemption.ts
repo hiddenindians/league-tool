@@ -1,12 +1,15 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/hook.html
 import type { HookContext } from '../declarations'
-
+const QRCode = require('qrcode')
 export const notifyUserRedemption = async (context: HookContext) => {
-  const { data, id, params } = context
-  console.log('id ', id)
-  console.log('args, ', params)
+  const { data, params } = context
+  console.log("result ", context.data.generatedCode)
 
   if (!data || !data.$push || !data.$push.redemptions) {
+    return context
+  }
+
+  if(!data.generatedCode){
     return context
   }
    // Calculate an expiry time 20 minutes from now
@@ -18,10 +21,24 @@ export const notifyUserRedemption = async (context: HookContext) => {
   const redemptions = data.$push.redemptions.$each
   const user = params.user
   const email = user.email || ''
+  const verifyUrl = `https://play.shopnekos.ca/verify/${data.generatedCode}`
+  let qrDataUrl: string
+  let qrBuffer: Buffer | null = null
 
+  try{
+    qrDataUrl = await QRCode.toDataURL(verifyUrl, { margin: 1, width: 300 })
+    // Convert data URL to a Buffer for embedding as an attachment
+    const base64Data = qrDataUrl.split(',')[1] || ''
+    qrBuffer = Buffer.from(base64Data, 'base64')
+  }catch(err) {
+    console.error('Failed to generate QR code:', err);
+    qrDataUrl = ''
+  }
   if (email == '') {
     return context
   }
+
+  console.log(qrDataUrl)
 
   const subject =
     redemptions.length == 1
@@ -42,20 +59,41 @@ export const notifyUserRedemption = async (context: HookContext) => {
       <li>Show this confirmation email at the register</li>
       <li>Claim your rewards!</li>
     </ol>
+    ${qrBuffer
+     ? `<img src="cid:qrCode" alt="We will scan this to verify your code" style="max-width:300px;" />`
+     : `<p>(QR code generation failed; if you're an employee at Neko's click <a href="${verifyUrl}">here</a> to verify.)</p>`
+   }
+
+    <p>${data.generatedCode} [If this says 'undefined', something went wrong. Please let us know: <a href="https://discord.gg/7eGUwGMAuA">at our discord</a></p> 
     <p>This redemption will expire on <strong>${expiryDateStr}</strong> at <strong>${expiryTimeStr}</strong>.</p>
     <p>Thank you for playing at Neko's. We hope you enjoy your ${redemptions.length == 1 ? 'reward': 'rewards'}!</p>
     <p>— Neko's</p>
   `;
 
   try {
-    await context.app.service('mailer').create({
+    const message: any = {
       from: 'no-reply@play.shopnekos.ca',
       to: email,
       subject,
       html
-    })
+    }
+    // If QR was successfully generated, attach it with a Content-ID
+    if (qrBuffer) {
+      message.attachments = [
+        {
+          filename: 'qr.png',
+          content: qrBuffer,
+          cid: 'qrCode'
+        }
+      ]
+    }
+    await context.app.service('mailer').create(message)
   } catch (err) {
     console.error('Error sending redemption email:', err)
   }
+
+
+    context.result.user = params.user
+    context.result.generatedCode = context.data.generatedCode
   return context
 }

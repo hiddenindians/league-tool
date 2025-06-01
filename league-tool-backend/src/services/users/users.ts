@@ -25,6 +25,7 @@ import { castObjectIdFields } from '../../hooks/cast-object-id-fields'
 import { promoteFirstUser } from '../../hooks/promote-first-user'
 import { preventDuplicateBonusCode } from '../../hooks/prevent-duplicate-bonus-code'
 import { notifyUserRedemption } from '../../hooks/notify-user-redemption'
+import { generateQrCode } from '../../hooks/generate-qr-code'
 export * from './users.class'
 export * from './users.schema'
 
@@ -43,7 +44,6 @@ const isLocalSignup = (context: HookContext) => {
 const sendVerify = () => {
   return async (context: HookContext) => {
     const notifiy = notifier(context.app)
-    console.log('send-notify')
 
     const users = Array.isArray(context.result) ? context.result : [context.result]
 
@@ -89,6 +89,7 @@ export const user = (app: Application) => {
         iff(isLocalSignup, addVerification('auth-management'))
       ],
       patch: [
+        generateQrCode,
         notifyUserRedemption,
         preventDuplicateBonusCode,
         castObjectIdFields(['applied_by', 'game_id', 'reward_id']),

@@ -1,0 +1,22 @@
+ <div class="verify-container">
+      <h2>Verifying your code…</h2>
+        @if(status === 'pending'){
+      <p>Please wait.</p>
+
+        }
+          @if(status === 'success'){
+        <p>Code <strong>{{ code }}</strong> was successfully verified!</p>
+
+        }
+          @if(status === 'already'){
+<p>        Sorry, code <strong>{{ code }}</strong> has already been used or is invalid.
+</p>
+        }
+    @if(status === 'error'){
+ <p>
+        An error occurred while verifying code <strong>{{ code }}</strong>.
+      </p>
+    }
+     
+      <a routerLink="['/dashboard']">Go back home</a>
+    </div>
