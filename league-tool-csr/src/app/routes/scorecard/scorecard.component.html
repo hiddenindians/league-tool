@@ -4,7 +4,7 @@
         <h1>Which game are you playing?</h1>
         <mat-radio-group formControlName="game" class="game-radio-group" aria-label="Select an option">
             @for(game of games; track game){
-                <mat-radio-button class="game-radio-button" value="{{game._id}}">{{game.name}}</mat-radio-button>
+                <mat-radio-button class="game-radio-button" value="{{game._id}}">{{game.name}} (+{{game.participation_points}} points)</mat-radio-button>
 
             }
         </mat-radio-group>
@@ -31,12 +31,10 @@
             @else {
                 <h4>Thanks for playing! {{points}} points have been added to you account.</h4>
             }
-                    <button mat-flat-button matStepperPrevious>Back</button>
-                    <br/>
 
             <!-- <a [routerLink]="['/dashboard']">Back to the Dashboard</a> -->
              <!-- hack to prevent duplicate code use bug. forces a fresh user object when we refresh. -->
-                        <a href="/dashboard">Back to the Dashboard</a>
+                        <a mat-flat-button href="/dashboard">Back to the Dashboard</a>
 
     </mat-step>
     </form>

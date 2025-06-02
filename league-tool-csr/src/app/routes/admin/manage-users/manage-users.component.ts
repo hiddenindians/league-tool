@@ -53,7 +53,6 @@ export class ManageUsersComponent {
       .find({ query: {} })
       .then((data: any) => {
         this.users = Array.isArray(data) ? data : data.data;
-        console.log(data.data)
       })
       .catch((err: any) => console.error('error loading users', err));
   }

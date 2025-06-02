@@ -37,7 +37,6 @@ export class VerifyComponent {
       .subscribe((user: any) => {
         this.user = user;
       });
-    //  console.log(this.user)
     if (!this.allowedRoles.includes(this.user!.role)) {
       this.status = 'not-allowed';
     } else {

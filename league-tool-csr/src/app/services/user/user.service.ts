@@ -13,7 +13,6 @@ export class UserService {
   constructor(private _feathers: FeathersService) {}
 
   updateUsername(id: string, username: string) {
-    console.log(id);
     this._feathers.service('users').patch(id, {
       username: username,
     });
@@ -26,7 +25,6 @@ export class UserService {
   }
 
   addToTotalPoints(id: string, amount: number) {
-    console.log(id, ' ', amount);
     return this._feathers.service('users').patch(id, {
       $inc: { total_points: amount },
     });

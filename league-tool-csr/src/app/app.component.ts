@@ -34,7 +34,6 @@ export class AppComponent {
 
   ngOnInit() {
 this.userSubscription = this.auth.isAdmin.subscribe((data)=> {
-  console.log(data)
   this.isAdmin = data
 })  }
 

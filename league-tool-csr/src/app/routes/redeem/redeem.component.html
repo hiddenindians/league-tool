@@ -1,5 +1,5 @@
 <div class="container">
-  @if(!isConfirmationPage){
+  @if(!isConfirmationPage && !isLoading){
   <mat-card class="header">
     <mat-card-title>Choose your rewards</mat-card-title>
     <mat-card-subtitle>
@@ -50,15 +50,22 @@
     <div class="info">
       Selected Rewards: <strong>{{ selectedRewards.size }}</strong> | Will Redeem <strong>{{ toRedeem }}</strong> Points
     </div>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="confirmRedemptionDialog()"
-      [disabled]="availablePoints - toRedeem < 0"
-    >
-      Redeem
-    </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="confirmRedemptionDialog()"
+        [disabled]="availablePoints - toRedeem < 0"
+      >
+        Redeem
+      </button>
+  
   </mat-card>
+  }
+
+  @if(isLoading){
+        <div style="text-align: center; margin: 2rem auto;">
+        <mat-progress-spinner diameter="40" mode="indeterminate" color="accent"></mat-progress-spinner>
+      </div>
   }
 
   @if(isConfirmationPage){

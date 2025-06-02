@@ -26,6 +26,7 @@ import { promoteFirstUser } from '../../hooks/promote-first-user'
 import { preventDuplicateBonusCode } from '../../hooks/prevent-duplicate-bonus-code'
 import { notifyUserRedemption } from '../../hooks/notify-user-redemption'
 import { generateQrCode } from '../../hooks/generate-qr-code'
+import { notifyPointsAdded } from '../../hooks/notify-points-added'
 export * from './users.class'
 export * from './users.schema'
 
@@ -100,7 +101,7 @@ export const user = (app: Application) => {
     after: {
       all: [],
       create: [iff(isLocalSignup, sendVerify(), removeVerification())],
-      patch: [notifyUserRedemption]
+      patch: [notifyPointsAdded, notifyUserRedemption]
     },
     error: {
       all: []

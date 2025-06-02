@@ -65,7 +65,6 @@ export class FeathersService {
       .toPromise()
       .then((res: any)=>{
       //  return this._feathers.logout();
-        console.log('Response Headers:', res.headers);
 
       
       })

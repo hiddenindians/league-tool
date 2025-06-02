@@ -3,7 +3,6 @@ import type { HookContext } from '../declarations'
 const QRCode = require('qrcode')
 export const notifyUserRedemption = async (context: HookContext) => {
   const { data, params } = context
-  console.log('result ', context.data.generatedCode)
 
   if (!data || !data.$push || !data.$push.redemptions) {
     return context
@@ -39,7 +38,6 @@ export const notifyUserRedemption = async (context: HookContext) => {
     return context
   }
 
-  console.log(qrDataUrl)
 
   const subject =
     redemptions.length == 1
@@ -50,34 +48,43 @@ export const notifyUserRedemption = async (context: HookContext) => {
     : ''
 
   const html = `
-     <p>Hi ${user.username || 'there'},</p>
-    <p>Congratulations! You've just redeemed the following ${redemptions.length == 1 ? 'reward' : 'rewards'}:</p>
-    <ul>
-      ${rewardListHtml}
-    </ul>
-    <p>Steps to claim your ${redemptions.length == 1 ? 'reward' : 'rewards'}</p>
-    <ol>
-      <li>Show this confirmation email at the register</li>
-      <li>Claim your rewards!</li>
-    </ol>
-    <hr/>
-    <p> For Staff Use </p>
-    <figure>
-    ${
-      qrBuffer
-        ? `<img src="cid:qrCode" alt="We will scan this to verify your code" style="max-width:300px;" />`
-        : `<p>(QR code generation failed; if you're an employee at Neko's click <a href="${verifyUrl}">here</a> to verify.)</p>`
-    }
+  <div style="font-family: sans-serif; background-color: #f8f8f8; padding: 2rem;">
+    <div style="max-width: 500px; margin: auto; background-color: white; border-radius: 8px; padding: 2rem;">
+      <img src="https://play.shopnekos.ca/neko.png" alt="Neko's Logo" style="height: 48px; display: block; margin: 0 auto 1rem;" />
+      <p>Congratulations${ '&nbsp;' + user.username || ''}! You've just redeemed the following ${redemptions.length == 1 ? 'reward' : 'rewards'}:</p>
+      <ul>
+        ${rewardListHtml}
+      </ul>
+      <p>Steps to claim your ${redemptions.length == 1 ? 'reward' : 'rewards'}</p>
+      <ol>
+        <li>Show this confirmation email at the register</li>
+        <li>Claim your rewards!</li>
+      </ol>
+      <hr/>
+      <p>For Staff Use</p>
+      <figure>
+        ${
+          qrBuffer
+            ? `<img src="cid:qrCode" alt="We will scan this to verify your code" style="max-width:300px;" />`
+            : `<p>(QR code generation failed; if you're an employee at Neko's click <a href="${verifyUrl}">here</a> to verify.)</p>`
+        }
+        <figcaption>Validation Code</figcaption>
+      </figure>
+      <p><strong>
+        ${data.generatedCode.slice(0, data.generatedCode.length / 2)}<br/>
+        ${data.generatedCode.slice(data.generatedCode.length / 2)}
+      </strong><br/>[If this says 'undefined', something went wrong. Please let @hiddenindians know <a href="https://discord.gg/7eGUwGMAuA">via our discord</a>]</p>
+      <p>This redemption will expire on <strong>${expiryDateStr}</strong> at <strong>${expiryTimeStr}</strong>.</p>
+      <p>Thank you for playing at Neko's. We hope you enjoy your ${redemptions.length == 1 ? 'reward' : 'rewards'}!</p>
+      <p>— Neko's</p>
 
-   <figcaption>Validation Code</figcaption></figure>
-   <p> <strong>
-    ${data.generatedCode.slice(0, data.generatedCode.length / 2)}<br/>
-    ${data.generatedCode.slice(data.generatedCode.length / 2)}
-  </strong><br/>[If this says 'undefined', something went wrong. Please let @hiddenindians know <a href="https://discord.gg/7eGUwGMAuA">via our discord</a></p>
-    <p>This redemption will expire on <strong>${expiryDateStr}</strong> at <strong>${expiryTimeStr}</strong>.</p>
-    <p>Thank you for playing at Neko's. We hope you enjoy your ${redemptions.length == 1 ? 'reward' : 'rewards'}!</p>
-    <p>— Neko's</p>
-  `
+      <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
+        <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
+        <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
+      </div>
+    </div>
+  </div>
+`
 
   try {
     const message: any = {

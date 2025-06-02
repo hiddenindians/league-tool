@@ -1,16 +1,145 @@
- a {
-    color: #c9c9c9;
-  }
-  .game-radio-group {
-      display: flex;
-  flex-direction: column;
-  margin: 15px 0;
-  align-items: flex-start;
-  }
-button {
-    margin-right: 1em;
-    margin-bottom: 1em
+/* Scorecard page base */
+:host {
+  display: block;
+  padding: 1rem;
+  background-color: #121212; /* match dark background */
+  min-height: 100vh;
 }
-  .game-radio-button {
-    margin: 5px
+
+/* Stepper form container */
+mat-stepper {
+  background: none;
+  color: #fff;
+
+  .mat-horizontal-stepper-header {
+    margin-bottom: 1.5rem;
+
+    .mat-step-icon {
+      background-color: #00c6a6 !important; /* teal accent */
+      color: #121212 !important;
+    }
+
+    .mat-step-header .mat-step-label {
+      color: rgba(255, 255, 255, 0.75) !important;
+      font-weight: 500;
+    }
+
+    .mat-step-header.mat-active .mat-step-label {
+      color: #fff !important;
+      font-weight: 600;
+    }
+
+    .mat-step-header .mat-line {
+      border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
   }
+
+  .mat-stepper-content {
+    padding: 0; /* let inner card handle spacing */
+  }
+}
+
+/* Card-like container for each step */
+.step-card {
+  background-color: #1e1e1e;
+  padding: 2rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  margin-bottom: 1.5rem;
+}
+
+/* Heading */
+.step-card h1 {
+  margin: 0 0 1rem;
+  color: #fff;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+/* Radio group container */
+.game-radio-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+
+  .game-radio-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 100%;
+
+    .mat-radio-outer-circle,
+    .mat-radio-inner-circle {
+      border-color: #c9c9c9 !important;
+    }
+
+    .mat-radio-checked .mat-radio-inner-circle {
+      background-color: #00c6a6 !important;
+      border-color: #00c6a6 !important;
+    }
+
+    /* Label text styling */
+    span.mat-radio-label-content {
+      display: flex;
+      flex-direction: column;
+      margin-left: 0.5rem;
+
+      .game-name {
+        font-size: 1rem;
+        color: #fff;
+        line-height: 1.2;
+      }
+
+      .game-points {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}
+
+/* Buttons */
+.step-card button {
+  background-color: #00c6a6;
+  color: #121212;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 24px;
+  min-width: 200px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #00b198;
+  }
+
+  &[disabled] {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.step-card .mat-flat-button {
+  margin-right: 1rem;
+}
+
+/* Final confirmation step */
+mat-stepper .mat-step .mat-step-content h4 {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+mat-stepper .mat-step .mat-step-content a {
+  text-decoration: none;
+  background-color: #00c6a6;
+  color: #121212;
+  padding: 0.75rem 1.5rem;
+  border-radius: 24px;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #00b198;
+  }
+}

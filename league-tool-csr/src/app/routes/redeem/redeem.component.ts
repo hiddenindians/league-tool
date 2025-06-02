@@ -15,9 +15,10 @@ import { RewardsService } from '../../services/rewards/rewards.service';
 import { Reward } from '../../shared/models/reward.model';
 import { QRCodeComponent } from 'angularx-qrcode'
 import { environment } from '../../../environment/environment';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-redeem',
-  imports: [ QRCodeComponent, RouterLink, CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule], 
+  imports: [ QRCodeComponent, RouterLink, CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule, MatProgressSpinnerModule], 
   templateUrl: './redeem.component.html',
   styleUrl: './redeem.component.scss'
 })
@@ -37,6 +38,7 @@ export class RedeemComponent {
   generatedCode: string | null = null
   qrData: string = ''
   linkDomain: string = environment.link_domain
+  isLoading = false;
 
   constructor(private rewardsService: RewardsService, private auth: AuthService, private user: UserService, private dialog: MatDialog) {
     this.auth.currentUser.subscribe((user: any) => {
@@ -75,17 +77,18 @@ export class RedeemComponent {
   }
 
   redeemRewards(){
-    
+    this.isLoading = true;
     this.user.updateRedeemedPoints(this.currentUserId, this.redeemedPoints + Array.from(this.selectedRewards).reduce((sum, r: any) => sum + r.points, 0))
       .then(()=> {
            return this.user.updateRedemptionLog(this.currentUserId, this.selectedRewards)
       }).then ((updatedUser: any) => {
-        console.log(updatedUser)
         this.setExpiryTime()
         this.isConfirmationPage = true
+        this.isLoading = false;
       })
       .catch((err:any)=> {
-        console.log(err)
+        console.error(err)
+        this.isLoading = false;
       })
   }
 

@@ -120,7 +120,7 @@ export class AuthService {
         window.location.href = '/auth/login'; // <-- full reload
       })
       .catch((err: any) => {
-        console.log('logout failed', err);
+        console.error('logout failed', err);
         this.purgeAuth();
         window.location.href = '/auth/login'; // <-- full reload
       });
@@ -158,7 +158,6 @@ export class AuthService {
   }
 
   public forgotPassword(email: string): Observable<void> {
-    console.log('forgot');
     return this._feathers
       .service('auth-management')
       .watch()
@@ -176,7 +175,6 @@ export class AuthService {
   }
 
   public sendVerification(email: string): Promise<void> {
-    console.log('sengin');
     return this._feathers.service('auth-management').create({
       action: 'resendVerifySignup',
       value: {

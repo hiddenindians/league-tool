@@ -1,44 +1,92 @@
+/* Card base */
+mat-card {
+  width: 95%;
+  margin: 1rem auto;
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding-bottom: 1.5rem;  // ensure space below buttons
+}
+
+/* User info (avatar + welcome) */
 .user-info {
   text-align: center;
-  margin: 1rem;
+  margin-bottom: 0.75rem;
 
   .user-avatar {
-    width: 80px;
-    height: 80px;
+    width: 4.5rem; /* 72px */
+    height: 4.5rem;
     border-radius: 50%;
+    border: 2px solid #00c6a6;
     margin-bottom: 0.5rem;
+    object-fit: cover;
   }
 
   h2 {
-    margin: 0;
+    margin: 0 1rem;          // allow some horizontal padding
     font-size: 1.5rem;
+    color: #fff;
+    word-wrap: break-word;   // allow wrapping for long names
+    white-space: normal;
   }
 }
 
-a {
-  color: #f9f9f9
-}
-
+/* Card content */
 .dashboard-card-content {
   text-align: center;
+  padding: 2rem 0 1rem;  // add 2rem top padding, keep 1rem bottom padding
+
+  h1 {
+    margin: 0.25rem 0;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
 }
+
+/* Divider */
+.dashboard-divider {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  width: 90%;
+  margin: 1rem auto;
+}
+
+/* Buttons */
 .dashboard-button-container {
-  width: 95% ;
-  margin: 0 auto
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;             // increase space between buttons
+  margin: 1rem 0 0;        // remove bottom margin (handled by card padding)
+  padding: 0 1rem;         // add side padding so buttons don’t touch edges
+
+  .dashboard-button {
+    flex: 1 1 45%;        // each button takes ~45% of row
+    max-width: 200px;     // cap max width per button
+    font-weight: 500;
+    padding-top: 0.75rem;  // increase vertical padding inside buttons
+    padding-bottom: 0.75rem;
+  }
 }
 
-.dashboard-button {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 1rem;
-}
-mat-card {
-  width: 95%;
-  margin: 0 auto;
+/* Full-width buttons on small screens */
+@media (max-width: 360px) {
+  .dashboard-button-container .dashboard-button {
+    flex: 1 1 100%;
+    max-width: none;
+  }
 }
 
-// Email verification warning styles
+/* Verification warning (unchanged) */
 .verification-warning {
   margin-top: 2rem;
   padding: 1rem;

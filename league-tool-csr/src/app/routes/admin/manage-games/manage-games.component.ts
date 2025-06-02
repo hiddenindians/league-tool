@@ -92,7 +92,6 @@ export class ManageGamesComponent {
     if (this.gameForm.valid) {
       this.isLoading = true;
       try {
-        console.log(this.gameForm.value);
         const newGame = await this.gameService.createGame({
           ...this.gameForm.value,
           leagues: [],

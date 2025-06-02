@@ -159,7 +159,7 @@ export class AuthComponent implements OnInit {
       )
       .subscribe({
         error: (err: any) => {
-          console.log(err);
+          console.error(err);
           this.errors = err;
           this.isSubmitting = false;
         },
@@ -214,7 +214,7 @@ export class AuthComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: (err: any) => {
-        console.log(err);
+        console.error(err);
         this.errors = err;
         this.isSubmitting = false;
       },

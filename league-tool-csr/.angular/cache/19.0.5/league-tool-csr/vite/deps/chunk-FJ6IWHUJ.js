@@ -489,11 +489,6 @@ var Breakpoints = {
 };
 
 export {
-  coerceBooleanProperty,
-  coerceNumberProperty,
-  coerceArray,
-  coerceCssPixelValue,
-  coerceElement,
   Platform,
   getSupportedInputTypes,
   normalizePassiveListenerOptions,
@@ -504,9 +499,14 @@ export {
   _getFocusedElementPierceShadowDom,
   _getEventTarget,
   _isTestEnvironment,
+  coerceBooleanProperty,
+  coerceNumberProperty,
+  coerceArray,
+  coerceCssPixelValue,
+  coerceElement,
   LayoutModule,
   MediaMatcher,
   BreakpointObserver,
   Breakpoints
 };
-//# sourceMappingURL=chunk-TWV5PULW.js.map
+//# sourceMappingURL=chunk-FJ6IWHUJ.js.map

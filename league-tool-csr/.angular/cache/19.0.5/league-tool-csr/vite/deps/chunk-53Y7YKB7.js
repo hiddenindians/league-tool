@@ -7,7 +7,7 @@ import {
   coerceElement,
   coerceNumberProperty,
   normalizePassiveListenerOptions
-} from "./chunk-TWV5PULW.js";
+} from "./chunk-FJ6IWHUJ.js";
 import {
   DOCUMENT
 } from "./chunk-7KDSF5W5.js";
@@ -5227,8 +5227,6 @@ var _MatInternalFormField = class __MatInternalFormField {
 })();
 
 export {
-  Directionality,
-  BidiModule,
   _CdkPrivateStyleLoader,
   _VisuallyHiddenLoader,
   BACKSPACE,
@@ -5257,6 +5255,8 @@ export {
   FocusMonitor,
   A11yModule,
   _IdGenerator,
+  Directionality,
+  BidiModule,
   VERSION,
   AnimationCurves,
   AnimationDurations,
@@ -5298,4 +5298,4 @@ export {
   MatRippleLoader,
   _MatInternalFormField
 };
-//# sourceMappingURL=chunk-B7F2B327.js.map
+//# sourceMappingURL=chunk-53Y7YKB7.js.map
