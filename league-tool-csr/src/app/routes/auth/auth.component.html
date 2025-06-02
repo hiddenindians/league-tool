@@ -41,7 +41,7 @@
           type="submit"
           [disabled]="authForm.invalid || isSubmitting"
         >
-          Send Reset Link
+          Send Password Reset Email
         </button>
       </form>
 
@@ -71,7 +71,7 @@
           type="submit"
           [disabled]="authForm.invalid || isSubmitting"
         >
-          Send Reset Link
+          Send Verification Email
         </button>
       </form>
 
@@ -92,12 +92,13 @@
             type="password"
             formControlName="resetPassword"
             placeholder="Enter new password"
+            autocomplete="new-password"
           />
           @if (authForm.get('resetPassword')?.hasError('required')) {
             <mat-error>Password is required</mat-error>
           }
           @if (authForm.get('resetPassword')?.hasError('minlength')) {
-            <mat-error>Minimum 6 characters</mat-error>
+            <mat-error>Minimum 8 characters</mat-error>
           }
         </mat-form-field>
 
@@ -200,9 +201,7 @@
         <a [routerLink]="['/auth/login']">Have an account?</a>
       } @else if (authType === 'login') {
         <a [routerLink]="['/auth/register']">Need an account?</a>
-        <br/>
         <a [routerLink]="['/auth/forgot-password']">Forgot your password?</a>
-        <br/>
         <a [routerLink]="['/auth/resend-verification']">Resend Verification Email</a>
       } @else if (authType === 'forgot' || authType === 'resend' ) {
         <a [routerLink]="['/auth/login']">Back to login</a>
