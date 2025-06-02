@@ -1,4 +1,4 @@
-import {  Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable, PLATFORM_ID } from '@angular/core';
 import { FeathersService } from '../api/feathers.service';
 import { Router } from '@angular/router';
 import {
@@ -28,6 +28,10 @@ export class AuthService {
     map((user: any) => user?.role === 'admin')
   );
 
+  public isVerified = this.currentUser.pipe(
+    map((user: any) => user?.isVerified === 'true')
+  );
+
   constructor(private _feathers: FeathersService, private router: Router) {
     this._feathers.service('users').on('patched', (user: any) => {
       const currentUser = this.currentUserSubject.value;
@@ -38,8 +42,10 @@ export class AuthService {
   }
 
   public loginWithDiscord(): void {
-window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
-  window.document.cookie = 'feathers-oauth.sig=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    window.document.cookie =
+      'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    window.document.cookie =
+      'feathers-oauth.sig=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
     window.location.href = `${this._feathers.getApiUrl()}/oauth/discord`;
   }
 
@@ -98,8 +104,7 @@ window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:0
       games: [],
       redemptions: [],
       total_points: 0,
-      total_redeemed: 0
-
+      total_redeemed: 0,
     };
 
     return from(
@@ -112,12 +117,12 @@ window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:0
       .logout()
       .then(() => {
         this.purgeAuth();
-      window.location.href = '/auth/login'; // <-- full reload
+        window.location.href = '/auth/login'; // <-- full reload
       })
       .catch((err: any) => {
         console.log('logout failed', err);
         this.purgeAuth();
-      window.location.href = '/auth/login'; // <-- full reload
+        window.location.href = '/auth/login'; // <-- full reload
       });
   }
 
@@ -132,7 +137,7 @@ window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:0
         })
         .catch((err: any) => {
           this.logout();
-          // this.router.navigate(['/auth/login']);
+          this.router.navigate(['/auth/login']);
           reject(err);
         });
     });
@@ -148,33 +153,42 @@ window.document.cookie = 'feathers-oauth=; Path=/; Expires=Thu, 01 Jan 1970 00:0
   }
 
   public purgeAuth(): void {
-    localStorage.removeItem('feathers-jwt')
+    localStorage.removeItem('feathers-jwt');
     this.currentUserSubject.next(null);
   }
 
-  public forgotPassword(email: string):Observable<void> {
-    console.log('forgot')
+  public forgotPassword(email: string): Observable<void> {
+    console.log('forgot');
     return this._feathers
       .service('auth-management')
       .watch()
-      .create({action: 'sendResetPwd', value: {email: email}})
-
-
+      .create({ action: 'sendResetPwd', value: { email: email } });
   }
 
-  public resetPassword(token: string, password: string):Observable<void>{
-    return this._feathers
-      .service('auth-management')
-      .watch()
-      .create({action: 'resetPwdLong', value: { 
-        token, password      }})
+  public resetPassword(token: string, password: string): Observable<void> {
+    return this._feathers.service('auth-management').watch().create({
+      action: 'resetPwdLong',
+      value: {
+        token,
+        password,
+      },
+    });
+  }
 
+  public sendVerification(email: string): Promise<void> {
+    console.log('sengin');
+    return this._feathers.service('auth-management').create({
+      action: 'resendVerifySignup',
+      value: {
+        email,
+      },
+    });
   }
 
   public verifyToken(token: string): Observable<void> {
     return this._feathers
       .service('auth-management')
       .watch()
-      .create({ action: 'verifySignupLong', value:  token });
+      .create({ action: 'verifySignupLong', value: token });
   }
 }

@@ -30,6 +30,8 @@ export class DashboardComponent {
   username = '';
   avatar = '';
   userSubscription: any;
+  isVerified: boolean = false
+  email: string = ""
 
   constructor(private auth: AuthService) {}
 
@@ -43,7 +45,14 @@ export class DashboardComponent {
         this.availablePoints = this.totalPoints - this.redeemedPoints || 0;
         this.username = user.username;
         this.avatar = user.avatar;
+        this.isVerified = user.isVerified
+        this.email = user.email
       });
+  }
+
+  resendVerification() {
+    console.log(this.email)
+    this.auth.sendVerification(this.email)
   }
 
   ngOnDestroy() {

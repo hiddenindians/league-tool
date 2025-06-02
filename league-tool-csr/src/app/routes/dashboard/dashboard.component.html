@@ -1,18 +1,59 @@
-    <mat-card>
-      <div class="dashboard-card-content">
-        <div class="user-info">
-          <img *ngIf="avatar" [src]="avatar" alt="User avatar" class="user-avatar">
-          <h2 *ngIf="username">Welcome, {{username}}!</h2>
-        </div>
-        
+@if(!isVerified){
 
-        <h1>{{availablePoints}}</h1>
-        <p>points available</p>
-        <p>{{totalPoints}} earned | {{redeemedPoints}} used</p>
-        </div>
-      <div class='dashboard-button-container'>
-        <a [routerLink]="['/scorecard']"><button mat-raised-button color="primary" class="dashboard-button">Enter Score</button></a>
-       <a [routerLink]="['/redeem']"><button mat-raised-button color="accent" class="dashboard-button">Redeem Points</button></a>
-       <!-- <a [routerLink]="['/settings']"><button mat-raised-button color="warn" class="dashboard-button">Manage Games</button></a> -->
-      </div>
-    </mat-card>
+    <div class="verification-warning">
+      <mat-card class="verification-card">
+        <mat-card-title class="verification-card-title">
+          ⚠️ Email Not Verified
+        </mat-card-title>
+        <mat-card-content class="verification-card-content">
+          Please verify your email to unlock all dashboard features.<br />
+          <button mat-raised-button color="warn" (click)="resendVerification()">
+            Click here to resend verification email
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <br/>
+  }
+
+<mat-card>
+  <div class="dashboard-card-content">
+    <div class="user-info">
+      <img
+        *ngIf="avatar"
+        [src]="avatar"
+        alt="User avatar"
+        class="user-avatar"
+      />
+      <h2 *ngIf="username">Welcome, {{ username }}!</h2>
+    </div>
+
+    <h1>{{ availablePoints }}</h1>
+    <p>points available</p>
+    <p>{{ totalPoints }} earned | {{ redeemedPoints }} used</p>
+  </div>
+  <div class="dashboard-button-container">
+    <a [routerLink]="isVerified ? ['/scorecard'] : null"
+      ><button
+      [disabled]="!isVerified"
+        mat-raised-button
+        color="primary"
+        class="dashboard-button"
+      >
+        Enter Points Code
+      </button></a
+    >
+    <a [routerLink]="isVerified ? ['/redeem'] : null"
+      ><button
+      [disabled]="!isVerified" 
+        mat-raised-button
+        color="accent"
+        class="dashboard-button"
+      >
+        Redeem Points
+      </button></a
+    >
+    <!-- <a [routerLink]="['/settings']"><button mat-raised-button color="warn" class="dashboard-button">Manage Games</button></a> -->
+  </div>
+  
+</mat-card>

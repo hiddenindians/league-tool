@@ -51,6 +51,36 @@
       }
     }
 
+     @else if (authType === 'resend') {
+      <form [formGroup]="authForm" (ngSubmit)="submitForm()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="you@example.com" />
+          @if (authForm.get('email')?.hasError('required')) {
+            <mat-error>Email is required</mat-error>
+          }
+          @if (authForm.get('email')?.hasError('email')) {
+            <mat-error>Must be a valid email</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="authForm.invalid || isSubmitting"
+        >
+          Send Reset Link
+        </button>
+      </form>
+
+      @if (sent) {
+        <div class="success-banner">
+          If that email exists, you’ll receive a verification link shortly.
+        </div>
+      }
+    }
+
     <!-- RESET PASSWORD MODE -->
     @else if (authType === 'reset') {
       <form [formGroup]="authForm" (ngSubmit)="submitForm()">
@@ -171,7 +201,9 @@
         <a [routerLink]="['/auth/register']">Need an account?</a>
         <br/>
         <a [routerLink]="['/auth/forgot-password']">Forgot your password?</a>
-      } @else if (authType === 'forgot') {
+        <br/>
+        <a [routerLink]="['/auth/resend-verification']">Resend Verification Email</a>
+      } @else if (authType === 'forgot' || authType === 'resend' ) {
         <a [routerLink]="['/auth/login']">Back to login</a>
       } @else {
         <!-- no footer link for reset -->

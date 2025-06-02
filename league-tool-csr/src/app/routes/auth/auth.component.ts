@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  Inject,
-  inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import {
   Validators,
   FormGroup,
@@ -20,16 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
-import { FeathersService } from '@feathersjs/feathers';
-import {
-  delay,
-  filter,
-  finalize,
-  map,
-  Observable,
-  switchMap,
-  take,
-} from 'rxjs';
+import { finalize, Observable, of } from 'rxjs';
 
 interface AuthForm {
   email?: FormControl;
@@ -94,6 +78,12 @@ export class AuthComponent implements OnInit {
       switch (this.authType) {
         case 'forgot':
           this.title = 'Forgot Password';
+          this.authForm = new FormGroup<AuthForm>({
+            email: new FormControl('', [Validators.required, Validators.email]),
+          });
+          break;
+        case 'resend':
+          this.title = 'Resend Verification';
           this.authForm = new FormGroup<AuthForm>({
             email: new FormControl('', [Validators.required, Validators.email]),
           });
@@ -195,7 +185,24 @@ export class AuthComponent implements OnInit {
       );
     } else if (this.authType === 'forgot') {
       observable = this.userService.forgotPassword(this.authForm.value.email);
-    } else if (this.authType === 'reset') {
+    } else if (this.authType === 'resend') {
+         // ⚠️ Call the method directly and handle result manually
+    this.userService.sendVerification(this.authForm.value.email)
+      .then(() => {
+        this.success = true;
+        this.sent = true;
+        this.isSubmitting = false;
+      })
+      .catch((err: any) => {
+        this.errors = {
+          message: err.message || 'Could not send verification email',
+          errors: err.errors || {},
+        };
+        this.isSubmitting = false;
+      });
+    return; // stop execution here
+    } 
+    else if (this.authType === 'reset') {
       observable = this.userService.resetPassword(
         this.token as string,
         this.authForm.value.resetPassword

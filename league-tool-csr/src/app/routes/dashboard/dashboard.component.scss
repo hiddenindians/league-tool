@@ -15,6 +15,10 @@
   }
 }
 
+a {
+  color: #f9f9f9
+}
+
 .dashboard-card-content {
   text-align: center;
 }
@@ -32,4 +36,39 @@
 mat-card {
   width: 95%;
   margin: 0 auto;
+}
+
+// Email verification warning styles
+.verification-warning {
+  margin-top: 2rem;
+  padding: 1rem;
+  text-align: center;
+
+  .verification-card {
+    background-color: #ffebee; // Light red background
+    border: 1px solid #f44336; // Red border
+    color: #b71c1c; // Dark red text
+    padding: 1rem;
+    border-radius: 8px;
+
+    .verification-card-title {
+      font-weight: bold;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .verification-card-content {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+
+      button {
+        margin-top: 0.5rem;
+        color: white;
+        background-color: #f44336; // Red button
+        &:hover {
+          background-color: #d32f2f;
+        }
+      }
+    }
+  }
 }

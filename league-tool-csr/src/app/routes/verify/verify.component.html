@@ -1,22 +1,50 @@
- <div class="verify-container">
-      <h2>Verifying your code…</h2>
-        @if(status === 'pending'){
-      <p>Please wait.</p>
+<div class="verify-container">
+  <h2>Verifying your code…</h2>
+  @if(status === 'pending'){
+  <p>Please wait.</p>
 
-        }
-          @if(status === 'success'){
-        <p>Code <strong>{{ code }}</strong> was successfully verified!</p>
+  } @if(status === 'success'){
+  <p class="success">
+    <strong>
+  {{ code.slice(0, code.length / 2) }}<br />
+  {{ code.slice(code.length / 2) }}
+</strong><br/><br/> This code was successfully verified!
+  </p>
 
+  } @if(status === 'already'){
+  <p  class="already">
+   <strong>
+  {{ code.slice(0, code.length / 2) }}<br />
+  {{ code.slice(code.length / 2) }}
+</strong><br/><br/> This code has already been used or is invalid.
+  </p>
+  } @if(status === 'error'){
+  <p class="error">
+    An error occurred while verifying code <br/><br/><strong>
+  {{ code.slice(0, code.length / 2) }}<br />
+  {{ code.slice(code.length / 2) }}
+</strong>
+  </p>
+}
+  @if(status === 'not-allowed') {
+   <p class="error">
+   You're not allowed to verify codes. 
+    <br/><br/><strong>
+  {{ code.slice(0, code.length / 2) }}<br />
+  {{ code.slice(code.length / 2) }}
+</strong>
+  </p>
+
+  }
+
+  @if (verifiedRedemptions.length > 0) {
+    <div class="verified-redemptions">
+      <h3>Verified Redemptions</h3>
+      <ul>
+        @for (redemption of verifiedRedemptions; track redemption) {
+        <li>{{ redemption.reward }} - {{ redemption.points_redeemed }} points</li>
         }
-          @if(status === 'already'){
-<p>        Sorry, code <strong>{{ code }}</strong> has already been used or is invalid.
-</p>
-        }
-    @if(status === 'error'){
- <p>
-        An error occurred while verifying code <strong>{{ code }}</strong>.
-      </p>
-    }
-     
-      <a routerLink="['/dashboard']">Go back home</a>
+      </ul>
     </div>
+  }
+</div>

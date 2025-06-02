@@ -42,6 +42,8 @@ export const castObjectIdFields = (fields: string[]) => {
       });
     }
 
+    console.log(data.$push?.redemptions)
+
     return context;
   };
 };

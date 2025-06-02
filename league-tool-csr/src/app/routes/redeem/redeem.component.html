@@ -80,8 +80,12 @@
       </p>
       @if(generatedCode){
         <div class="qr-section">
-          <h3>Validation Code</h3>
+          <hr/>
+          <h3>For Staff Use</h3>
+          <figure class="qr-figure">
           <qrcode [qrdata]="qrData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+            <figcaption class="qr-caption>">Validation Code</figcaption>
+        </figure>
         </div>
       }
 

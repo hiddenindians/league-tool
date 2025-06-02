@@ -11,6 +11,9 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { FeathersService } from '../../../services/api/feathers.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
@@ -18,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatListModule,
     MatChipsModule,
     MatCardModule,
@@ -25,6 +29,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
+    MatOptionModule,
+    MatSelectModule
   ],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss',
@@ -33,6 +39,7 @@ export class ManageUsersComponent {
   users: any[] = [];
   editingUser: User | null = null;
   originalPoints: number | null = null;
+  originalRole: string | null = null;
 
   constructor(private auth: AuthService, private feathers: FeathersService) {}
 
@@ -53,17 +60,35 @@ export class ManageUsersComponent {
   startEdit(user: User) {
     this.editingUser = user;
     this.originalPoints = user.total_points;
+    this.originalRole = user.role;
   }
 
   savePoints(user: User | null) {
     if (user == null) return;
     if (!this.editingUser) return;
 
+    const updateData: any = {};
+    if (user.total_points !== this.originalPoints) {
+      updateData.total_points = user.total_points;
+    }
+    if (user.role !== this.originalRole) {
+      updateData.role = user.role;
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      this.editingUser = null;
+      this.originalPoints = null;
+      this.originalRole = null;
+      return;
+    }
+
     this.feathers
       .service('users')
-      .patch(user._id, { total_points: user.total_points })
+      .patch(user._id, updateData)
       .then(() => {
-        (this.editingUser = null), (this.originalPoints = null);
+        this.editingUser = null;
+        this.originalPoints = null;
+        this.originalRole = null;
       })
       .catch((err: any) => console.error('Error saving points', err));
   }
@@ -71,7 +96,11 @@ export class ManageUsersComponent {
     if (this.editingUser && this.originalPoints != null) {
       this.editingUser.total_points = this.originalPoints;
     }
+    if (this.editingUser && this.originalRole != null) {
+      this.editingUser.role = this.originalRole;
+    }
     this.editingUser = null;
     this.originalPoints = null;
+    this.originalRole = null;
   }
 }

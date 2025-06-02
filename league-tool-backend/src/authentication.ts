@@ -102,7 +102,8 @@ export class DiscordStrategy extends OAuthStrategy {
         games: [],
         redemptions: [],
         total_points: 0,
-        total_redeemed: 0
+        total_redeemed: 0,
+        isVerified: true
       }
     }
 

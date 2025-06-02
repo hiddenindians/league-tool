@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 import { RewardsService } from '../../services/rewards/rewards.service';
 import { Reward } from '../../shared/models/reward.model';
 import { QRCodeComponent } from 'angularx-qrcode'
+import { environment } from '../../../environment/environment';
 @Component({
   selector: 'app-redeem',
   imports: [ QRCodeComponent, RouterLink, CommonModule, MatDialogModule, MatCheckboxModule, MatIconModule, MatCardModule, MatButtonModule, MatDividerModule, MatProgressBarModule], 
@@ -35,6 +36,7 @@ export class RedeemComponent {
   rewards: Reward[] = []
   generatedCode: string | null = null
   qrData: string = ''
+  linkDomain: string = environment.link_domain
 
   constructor(private rewardsService: RewardsService, private auth: AuthService, private user: UserService, private dialog: MatDialog) {
     this.auth.currentUser.subscribe((user: any) => {
@@ -48,7 +50,7 @@ export class RedeemComponent {
     this.user.userUpdates.subscribe((updatedUser: any) => {
       if (updatedUser && updatedUser.generatedCode){
         this.generatedCode = updatedUser.generatedCode
-        this.qrData = `https://play.shopnekos.ca/verify/${this.generatedCode}`
+        this.qrData = `${this.linkDomain}/verify/${this.generatedCode}`
       }
     })
 

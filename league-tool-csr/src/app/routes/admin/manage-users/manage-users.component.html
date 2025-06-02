@@ -22,7 +22,7 @@
           <ng-container *ngIf="editingUser?._id !== user._id; else editTpl">
             <button mat-stroked-button color="primary" (click)="startEdit(user)">
               <mat-icon>edit</mat-icon>
-              Edit Points
+              Edit
             </button>
           </ng-container>
           <ng-template #editTpl>
@@ -30,6 +30,14 @@
               <mat-form-field appearance="outline" class="points-edit">
                 <mat-label>Total Points</mat-label>
                 <input matInput type="number" [(ngModel)]="editingUser!.total_points" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="role-edit">
+                <mat-label>Role</mat-label>
+                <mat-select [(ngModel)]="editingUser!.role">
+                  <mat-option value="admin">Admin</mat-option>
+                  <mat-option value="staff">Staff</mat-option>
+                  <mat-option value="player">Player</mat-option>
+                </mat-select>
               </mat-form-field>
               <button mat-icon-button color="primary" (click)="savePoints(editingUser)">
                 <mat-icon>check</mat-icon>

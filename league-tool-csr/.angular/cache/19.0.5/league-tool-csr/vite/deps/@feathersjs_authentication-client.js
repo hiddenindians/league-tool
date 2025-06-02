@@ -1,8 +1,8 @@
 import {
-  require_lib as require_lib2
+  require_lib
 } from "./chunk-OSBADUCG.js";
 import {
-  require_lib
+  require_lib as require_lib2
 } from "./chunk-EBLTVSVM.js";
 import {
   __commonJS
@@ -62,7 +62,7 @@ var require_core = __commonJS({
       value: true
     });
     exports.AuthenticationClient = void 0;
-    var errors_1 = require_lib2();
+    var errors_1 = require_lib();
     var storage_1 = require_storage();
     var OauthError = class extends errors_1.FeathersError {
       constructor(message, data) {
@@ -242,7 +242,7 @@ var require_authentication = __commonJS({
       value: true
     });
     exports.authentication = void 0;
-    var commons_1 = require_lib();
+    var commons_1 = require_lib2();
     var authentication = () => {
       return (context, next) => {
         const {

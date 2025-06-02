@@ -8,7 +8,6 @@ import { passwordHash } from '@feathersjs/authentication-local'
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
 import type { UserService } from './users.class'
-import { isVerified } from 'feathers-authentication-management'
 
 // Main data model schema
 export const userSchema = Type.Object(
@@ -19,7 +18,7 @@ export const userSchema = Type.Object(
     password: Type.Optional(Type.String()),
     username: Type.Optional(Type.String()),
     avatar: Type.Optional(Type.String()),
-    role: Type.Union([Type.Literal('admin'), Type.Literal('player')]),
+    role: Type.Union([Type.Literal('staff'), Type.Literal('admin'), Type.Literal('player')]),
     total_points: Type.Optional(Type.Number()),
     total_redeemed: Type.Optional(Type.Number()),
     games: Type.Array(
@@ -34,7 +33,8 @@ export const userSchema = Type.Object(
         reward_id: Type.Optional(ObjectIdSchema()),
         reward: Type.String(),
         points_redeemed: Type.Number(),
-        date: Type.Number()
+        date: Type.Number(),
+        redemption_code: Type.Optional(Type.String())
       })
     ),
     bonus_codes_used: Type.Array(
@@ -106,7 +106,8 @@ export const userPatchSchema = Type.Partial(
             reward_id: Type.Optional(ObjectIdSchema()),
             reward: Type.Optional(Type.String()),
             points_redeemed: Type.Optional(Type.Number()),
-            date: Type.Optional(Type.Number())
+            date: Type.Optional(Type.Number()),
+            redemption_code: Type.Optional(Type.String())
           })
         ), // Keep this if still used
         bonus_codes_used: Type.Optional(
@@ -139,7 +140,8 @@ export const userQueryProperties = Type.Pick(userSchema, [
   'role',
   'verifyToken',
   'resetExpires',
-  'bonus_codes_used'
+  'bonus_codes_used',
+  'redemptions'
 ])
 export const userQuerySchema = Type.Intersect(
   [
@@ -154,10 +156,12 @@ export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
 export const userQueryResolver = resolve<UserQuery, HookContext<UserService>>({
   // If there is a user (e.g. with authentication), they are only allowed to see their own data
   _id: async (value, user, context) => {
-    if (context.params.user && context.params.user.role != 'admin') {
+    if (
+      context.params.user &&
+      !['admin', 'staff'].includes(context.params.user.role)
+    ) {
       return context.params.user._id
     }
-
     return value
   }
 })

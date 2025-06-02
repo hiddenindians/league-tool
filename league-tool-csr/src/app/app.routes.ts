@@ -24,7 +24,7 @@ export const routes: Routes = [
     path: 'auth/login',
     component: AuthComponent,
     data: { authType: 'login' },
-    canActivate: [unauthGuard]
+    canActivate: [unauthGuard],
   },
 
   // Register
@@ -32,7 +32,7 @@ export const routes: Routes = [
     path: 'auth/register',
     component: AuthComponent,
     data: { authType: 'register' },
-    canActivate: [unauthGuard]
+    canActivate: [unauthGuard],
   },
 
   // Callback (OAuth)
@@ -40,29 +40,35 @@ export const routes: Routes = [
     path: 'auth/callback',
     component: AuthComponent,
     data: { authType: 'callback' },
-    canActivate: [unauthGuard]
+    canActivate: [unauthGuard],
   },
 
   {
     path: 'auth/verify',
     component: AuthComponent,
-    data: { authType: 'verify'},
-    canActivate: [unauthGuard]
+    data: { authType: 'verify' },
+    canActivate: [unauthGuard],
   },
   {
-  path: 'auth/forgot-password',
-  component: AuthComponent,
-  data: { authType: 'forgot' }
-},
-{
-  path: 'verify/:code',
-  component: VerifyComponent,
-},
-{
-  path: 'auth/reset-password',
-  component: AuthComponent,
-  data: { authType: 'reset' }
-},
+    path: 'auth/forgot-password',
+    component: AuthComponent,
+    data: { authType: 'forgot' },
+  },
+  {
+    path: 'auth/resend-verification',
+    component: AuthComponent,
+    data: { authType: 'resend' },
+  },
+  {
+    path: 'verify/:code',
+    component: VerifyComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'auth/reset-password',
+    component: AuthComponent,
+    data: { authType: 'reset' },
+  },
 
   {
     path: 'settings',
@@ -107,6 +113,5 @@ export const routes: Routes = [
       },
     ],
   },
-    { path: '**', redirectTo: '', pathMatch: 'full' }
-
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

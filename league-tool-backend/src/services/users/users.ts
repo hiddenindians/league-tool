@@ -90,7 +90,6 @@ export const user = (app: Application) => {
       ],
       patch: [
         generateQrCode,
-        notifyUserRedemption,
         preventDuplicateBonusCode,
         castObjectIdFields(['applied_by', 'game_id', 'reward_id']),
         schemaHooks.validateData(userPatchValidator),
@@ -100,7 +99,8 @@ export const user = (app: Application) => {
     },
     after: {
       all: [],
-      create: [iff(isLocalSignup, sendVerify(), removeVerification())]
+      create: [iff(isLocalSignup, sendVerify(), removeVerification())],
+      patch: [notifyUserRedemption]
     },
     error: {
       all: []

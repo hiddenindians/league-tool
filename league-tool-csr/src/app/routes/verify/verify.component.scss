@@ -1,5 +1,24 @@
+
+
+// Material “green 600” → #43a047
+.success {
+  color: #43a047 !important;
+}
+
+// Material “amber 600” → #ffb300
+.error {
+  color: #ffb300 !important;
+}
+
+// Material “red 600” → #e53935
+.already {
+  color: #e53935 !important;
+}
+
 .verify-container {
-      max-width: 400px;
+      width:90%;
       margin: 2rem auto;
-      text-align: center;
+      overflow-wrap: anywhere;
+white-space: normal;
+      
     }

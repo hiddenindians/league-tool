@@ -2,6 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FeathersService } from '../../services/api/feathers.service';
+import { UserService } from '../../services/user/user.service';
+import { User } from '../../shared/models/user.model';
+import { AuthService } from '../../services/auth/auth.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-verify',
@@ -11,60 +15,95 @@ import { FeathersService } from '../../services/api/feathers.service';
 })
 export class VerifyComponent {
   code: string = '';
-  status: 'pending' | 'success' | 'already' | 'error' = 'pending';
+  status: 'pending' | 'success' | 'already' | 'error' | 'not-allowed' =
+    'pending';
+  redeemedBy: string = '';
+  verifiedRedemptions: any[] = [];
+  userSubscription: any;
+  user: User | null = null;
+  readonly allowedRoles = ['admin', 'staff'];
 
   constructor(
     private route: ActivatedRoute,
     private feathers: FeathersService,
-    private router: Router
+    private auth: AuthService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    console.log('verify');
-    // 1) Read the "code" from URL
-    this.code = this.route.snapshot.paramMap.get('code') || '';
-    if (!this.code) {
-      this.status = 'already';
-      return;
-    }
-
-    // 2) Call your Feathers backend to verify/consume the code
-    //    Here I assume your Feathers server exposes a REST endpoint at
-    //      GET http://<api-host>/verify-code/:code
-    //    which returns { valid: true } or { valid: false }.
-    //    Adjust the URL/response shape to match your actual API.
     await this.feathers.reauthenticate();
-    this.feathers
-      .service('codes')
-      .find({
-        query: {
-          code: this.code,
-        },
-      })
-      .then((data: any) => {
-        let result = data.data;
 
-        if (result.length > 1) {
-          console.error('too many codes found');
-        }
-
-        if (result.length === 1) {
-          if (result[0].used === false) {
-            this.feathers
-              .service('codes')
-              .patch(result[0]._id, {
-                used: true,
-              })
-              .then((res: any) => {
-              
-                if (res.used && res.used == true) {
-                  this.status = 'success';
-                }
-              });
-          } else {
-            this.status = 'already'
-          }
-        }
+    this.userSubscription = this.auth.currentUser
+       .pipe(filter((u) => !!u))
+      .subscribe((user: any) => {
+        this.user = user;
       });
+    //  console.log(this.user)
+    if (!this.allowedRoles.includes(this.user!.role)) {
+      this.status = 'not-allowed';
+    } else {
+      // 1) Read the "code" from URL
+      this.code = this.route.snapshot.paramMap.get('code') || '';
+      if (!this.code) {
+        this.status = 'already';
+        return;
+      }
+
+      try {
+        // 2) Reauthenticate (ensures token is valid)
+
+        // 3) Find the code entry
+        const codeResult: any = await this.feathers.service('codes').find({
+          query: { code: this.code },
+        });
+        const matches = codeResult.data;
+
+        if (matches.length > 1) {
+          this.status = 'error';
+          console.error('too many codes found');
+          return;
+        }
+
+        if (matches.length === 0) {
+          this.status = 'already';
+          return;
+        }
+
+        const entry = matches[0];
+        this.redeemedBy = entry.redeemedBy;
+
+        if (!entry.used) {
+          // 4) Mark code as used
+          const patched = await this.feathers
+            .service('codes')
+            .patch(entry._id, { used: true });
+          if (patched.used) {
+            this.status = 'success';
+
+            // 5) Fetch the user who redeemed
+            const userResult: any = await this.feathers.service('users').find({
+              query: { _id: this.redeemedBy },
+            });
+            const user = userResult.data[0] || null;
+            if (user && Array.isArray(user.redemptions)) {
+              // 6) Filter redemptions by code
+              this.verifiedRedemptions = user.redemptions.filter(
+                (r: any) => r.redemption_code === this.code
+              );
+            }
+          } else {
+            this.status = 'error';
+          }
+        } else {
+          this.status = 'already';
+        }
+      } catch (err: any) {
+        console.error('Verification error', err);
+        this.status = 'error';
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
   }
 }

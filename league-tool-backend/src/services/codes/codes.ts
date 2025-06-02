@@ -18,12 +18,11 @@ import type { Application, HookContext } from '../../declarations'
 import { CodesService, getOptions } from './codes.class'
 import { codesPath, codesMethods } from './codes.shared'
 import { randomBytes } from 'crypto'
+import { generateUniqueCode } from '../../hooks/generate-unique-code'
 
 export * from './codes.class'
 export * from './codes.schema'
-function makeRandomCode(len = 8): string {
-  return (randomBytes(len).toString('hex').slice(0, len).toUpperCase())
-}
+
 // A configure function that registers the service and its hooks via `app.configure`
 export const codes = (app: Application) => {
   // Register our service on the Feathers application
@@ -46,19 +45,14 @@ export const codes = (app: Application) => {
       all: [schemaHooks.validateQuery(codesQueryValidator), schemaHooks.resolveQuery(codesQueryResolver)],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(codesDataValidator), schemaHooks.resolveData(codesDataResolver),
-        async (context: HookContext) => {
-          const now = new Date()
-          context.data.code = makeRandomCode(12);
-          context.data.createdAt = now;
-          context.data.used = false
-          if(context.id){
-            context.data.redeemedBy = context.id
-          }
-          return context
-        }
+      create: [
+        schemaHooks.validateData(codesDataValidator),
+        schemaHooks.resolveData(codesDataResolver),
+        generateUniqueCode
       ],
-      patch: [schemaHooks.validateData(codesPatchValidator), schemaHooks.resolveData(codesPatchResolver),
+      patch: [
+        schemaHooks.validateData(codesPatchValidator),
+        schemaHooks.resolveData(codesPatchResolver),
         async (context: HookContext) => {
           if (context.data.used === true) {
             context.data.usedAt = new Date()

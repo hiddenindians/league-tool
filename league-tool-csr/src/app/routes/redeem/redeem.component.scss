@@ -69,3 +69,14 @@
     color: var(--mat-warn);
   }
 
+.qr-figure {
+  margin: 16px 0;
+  text-align: center; /* centers the QR code itself */
+}
+
+.qr-caption {
+  display: block;
+  text-align: right;
+  font-style: italic;
+  margin-top: 8px;
+}
