@@ -51,7 +51,6 @@ export class DashboardComponent {
   }
 
   resendVerification() {
-    console.log(this.email)
     this.auth.sendVerification(this.email)
   }
 
