@@ -22,21 +22,51 @@ export const notifyPointsAdded = async (context: HookContext) => {
  
 
   const html = `
-  <div style="font-family: sans-serif; background-color: #f8f8f8; padding: 2rem;">
-    <div style="max-width: 500px; margin: auto; background-color: white; border-radius: 8px; padding: 2rem;">
-      <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" style="filter:invert(0) !important; mix-blend-mode:normal !important; height: 48px; display: block; float: left; padding-left: 8px" />
-      <p>Congratulations${ '&nbsp;' + user.username || ''}! <p>
-      <p>${bonusCode.points_awarded} points have been added to your account </p>
-
-      <p>Thank you for playing at Neko's. We hope you had a great time!</p>
-      <p>— Neko's</p>
-
-      <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Points Added To Your Account</title>
+</head>
+<body style="margin:0; padding:0;">
+  <table cellpadding="0" cellspacing="0" border="0" width="100%" style="min-width:320px;">
+    <tr>
+      <td align="center" style="padding:16px 0;">
+        <table cellpadding="0" cellspacing="0" border="0" width="90%" style="max-width:500px; border-radius:8px; overflow:hidden; font-family:Arial, sans-serif;">
+          <tr>
+            <td align="left">
+              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="72" height="72" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
+            </td>
+          </tr>
+          <tr>
+            <td  padding-top:16px;" align="left">
+              <h1 style="font-weight:bold;">${bonusCode.points_awarded} points have been added to your account </h1>
+            </td>
+          </tr>
+          <tr>
+            <td align="left">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td height="16" style="font-size:0; line-height:0;">&nbsp;</td></tr>
+                <tr>
+                  <td style="font-size:16px; line-height:1.4;">
+                     <p>Thanks for playing at Neko's!</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+          <td style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
         <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
         <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
-      </div>
-    </div>
-  </div>
+      </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
 `
 
   try {

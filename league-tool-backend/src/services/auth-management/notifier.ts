@@ -56,17 +56,17 @@ export default (app: Application) => {
       <td align="center" style="padding:16px 0;">
         <table cellpadding="0" cellspacing="0" border="0" width="90%" style="max-width:500px; border-radius:8px; overflow:hidden; font-family:Arial, sans-serif;">
           <tr>
-            <td style="padding-left:24px;" align="left">
-              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="48" height="48" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
+            <td style="" align="left">
+              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="72" height="72" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
             </td>
           </tr>
           <tr>
-            <td style="padding-left:24px; padding-top:16px;" align="left">
+            <td style=" padding-top:16px;" align="left">
               <h1 style="font-weight:bold; color:#2D87E2; mix-blend-mode:normal !important">Verify your email</h1>
             </td>
           </tr>
           <tr>
-            <td style="padding:0 24px;" align="left">
+            <td style="" align="left">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr><td height="16" style="font-size:0; line-height:0;">&nbsp;</td></tr>
                 <tr>
@@ -91,19 +91,10 @@ export default (app: Application) => {
             </td>
           </tr>
           <tr>
-            <td align="center">
-              <table cellpadding="0" cellspacing="0" border="0" width="80%" style="border-top:1px solid rgba(255,255,255,0.2);">
-                <tr><td height="16" style="font-size:0; line-height:0;">&nbsp;</td></tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td align="left" style="padding:0 24px 24px 24px;">
-              <span style="font-size:14px; color:rgba(255,255,255,0.85);">
-                <a href="https://shopnekos.ca" style="color:#3498db!important; text-decoration:none; margin-right:8px;">shopnekos.ca</a> | 
-                <a href="mailto:hello@shopnekos.ca" style="color:#3498db!important; text-decoration:none; margin-left:8px;">hello@shopnekos.ca</a>
-              </span>
-            </td>
+            <td style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
+        <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
+        <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
+      </td>
           </tr>
         </table>
       </td>
@@ -134,29 +125,20 @@ export default (app: Application) => {
       <td align="center" style="padding:16px 0;">
         <table cellpadding="0" cellspacing="0" border="0" width="90%" style="max-width:500px; border-radius:8px; overflow:hidden; font-family:Arial, sans-serif;">
           <tr>
-            <td style="padding-left:24px;" align="left">
-              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="48" height="48" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
+            <td style="" align="left">
+              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="72" height="72" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
             </td>
           </tr>
           <tr>
-            <td style="padding-left:24px; padding-top:16px;" align="left">
+            <td style=" padding-top:16px;" align="left">
               <h1 style="font-weight:bold; color:#43a047;">Your email has been verified</h1>
             </td>
           </tr>
           <tr>
-            <td align="center">
-              <table cellpadding="0" cellspacing="0" border="0" width="80%" style="border-top:1px solid rgba(255,255,255,0.2);">
-                <tr><td height="16" style="font-size:0; line-height:0;">&nbsp;</td></tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td align="left" style="padding:0 24px 24px 24px;">
-              <span style="font-size:14px; color:rgba(255,255,255,0.85);">
-                <a href="https://shopnekos.ca" style="color:#3498db!important; text-decoration:none; margin-right:8px;">shopnekos.ca</a> | 
-                <a href="mailto:hello@shopnekos.ca" style="color:#3498db!important; text-decoration:none; margin-left:8px;">hello@shopnekos.ca</a>
-              </span>
-            </td>
+          <td style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
+        <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
+        <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
+      </td>
           </tr>
         </table>
       </td>
@@ -188,17 +170,17 @@ export default (app: Application) => {
       <td align="center" style="padding:16px 0;">
         <table cellpadding="0" cellspacing="0" border="0" width="90%" style="max-width:500px; border-radius:8px; overflow:hidden; font-family:Arial, sans-serif;">
           <tr>
-            <td style="padding-left:24px;" align="left">
-              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="48" height="48" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
+            <td style="" align="left">
+              <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" width="72" height="72" style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;" />
             </td>
           </tr>
           <tr>
-            <td style="padding-left:24px; padding-top:16px;" align="left">
+            <td style=""; padding-top:16px;" align="left">
               <h1 style="font-weight:bold; color:#e53935;">Reset your password</h1>
             </td>
           </tr>
           <tr>
-            <td style="padding:0 24px;" align="left">
+            <td style="" align="left">
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr><td height="16" style="font-size:0; line-height:0;">&nbsp;</td></tr>
                 <tr>
@@ -223,19 +205,10 @@ export default (app: Application) => {
             </td>
           </tr>
           <tr>
-            <td align="center">
-              <table cellpadding="0" cellspacing="0" border="0" width="80%" style="border-top:1px solid rgba(255,255,255,0.2);">
-                <tr><td height="16" style="font-size:0; line-height:0;">&nbsp;</td></tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td align="left" style="padding:0 24px 24px 24px;">
-              <span style="font-size:14px; color:rgba(255,255,255,0.85);">
-                <a href="https://shopnekos.ca" style="color:#3498db!important; text-decoration:none; margin-right:8px;">shopnekos.ca</a> | 
-                <a href="mailto:hello@shopnekos.ca" style="color:#3498db!important; text-decoration:none; margin-left:8px;">hello@shopnekos.ca</a>
-              </span>
-            </td>
+           <td style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
+        <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
+        <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
+      </td>
           </tr>
         </table>
       </td>

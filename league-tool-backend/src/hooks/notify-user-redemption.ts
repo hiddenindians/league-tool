@@ -48,42 +48,101 @@ export const notifyUserRedemption = async (context: HookContext) => {
     : ''
 
   const html = `
-  <div style="font-family: sans-serif; background-color: #f8f8f8; padding: 2rem;">
-    <div style="max-width: 500px; margin: auto; background-color: white; border-radius: 8px; padding: 2rem;">
-      <img src="https://play.shopnekos.ca/neko_nobg.png" alt="Neko's Logo" style="filter:invert(0) !important; mix-blend-mode:normal !important; height: 48px; display: block; margin: 0 auto 1rem;" />
-      <p>Congratulations${ '&nbsp;' + user.username || ''}! You've just redeemed the following ${redemptions.length == 1 ? 'reward' : 'rewards'}:</p>
-      <ul>
-        ${rewardListHtml}
-      </ul>
-      <p>Steps to claim your ${redemptions.length == 1 ? 'reward' : 'rewards'}</p>
-      <ol>
-        <li>Show this confirmation email at the register</li>
-        <li>Claim your rewards!</li>
-      </ol>
-      <hr/>
-      <p>For Staff Use</p>
-      <figure>
-        ${
-          qrBuffer
-            ? `<img src="cid:qrCode" alt="We will scan this to verify your code" style="max-width:300px;" />`
-            : `<p>(QR code generation failed; if you're an employee at Neko's click <a href="${verifyUrl}">here</a> to verify.)</p>`
-        }
-        <figcaption>Validation Code</figcaption>
-      </figure>
-      <p><strong>
-        ${data.generatedCode.slice(0, data.generatedCode.length / 2)}<br/>
-        ${data.generatedCode.slice(data.generatedCode.length / 2)}
-      </strong><br/>[If this says 'undefined', something went wrong. Please let @hiddenindians know <a href="https://discord.gg/7eGUwGMAuA">via our discord</a>]</p>
-      <p>This redemption will expire on <strong>${expiryDateStr}</strong> at <strong>${expiryTimeStr}</strong>.</p>
-      <p>Thank you for playing at Neko's. We hope you enjoy your ${redemptions.length == 1 ? 'reward' : 'rewards'}!</p>
-      <p>— Neko's</p>
-
-      <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
-        <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
-        <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
-      </div>
-    </div>
-  </div>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="min-width:320px;">
+  <tr>
+    <td align="center" style="padding:16px 0;">
+      <table cellpadding="0" cellspacing="0" border="0" width="90%" style="max-width:500px; border-radius:8px; overflow:hidden; font-family:Arial, sans-serif;">
+        <tr>
+          <td style="" align="left">
+            <img
+              src="https://play.shopnekos.ca/neko_nobg.png"
+              alt="Neko's Logo"
+              width="72"
+              height="72"
+              style="filter:invert(0) !important; mix-blend-mode:normal !important; display:block; border:none; outline:none;"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Congratulations${'&nbsp;' + user.username || ''}! You've just redeemed the following ${redemptions.length == 1 ? 'reward' : 'rewards'}:</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <ul>
+              ${rewardListHtml}
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Steps to claim your ${redemptions.length == 1 ? 'reward' : 'rewards'}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <ol>
+              <li>Show this confirmation email at the register</li>
+              <li>Claim your rewards!</li>
+            </ol>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <hr/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>For Staff Use</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <figure>
+              ${
+                qrBuffer
+                  ? `<img src="cid:qrCode" alt="We will scan this to verify your code" style="max-width:300px;" />`
+                  : `<p>(QR code generation failed; if you're an employee at Neko's click <a href="${verifyUrl}">here</a> to verify.)</p>`
+              }
+              <figcaption>Validation Code</figcaption>
+            </figure>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><strong>
+              ${data.generatedCode.slice(0, data.generatedCode.length / 2)}<br/>
+              ${data.generatedCode.slice(data.generatedCode.length / 2)}
+            </strong><br/>[If this says 'undefined', something went wrong. Please let @hiddenindians know <a href="https://discord.gg/7eGUwGMAuA">via our discord</a>]</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>This redemption will expire on <strong>${expiryDateStr}</strong> at <strong>${expiryTimeStr}</strong>.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Thank you for playing at Neko's. We hope you enjoy your ${redemptions.length == 1 ? 'reward' : 'rewards'}!</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>— Neko's</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #555; text-align: left; font-size: 0.8rem; color: #999;">
+            <img src="https://play.shopnekos.ca/Nekos-Web-Heading.png" alt="Neko's Header Logo" style="height: 32px; margin-bottom: 0.5rem;" /><br />
+            <span style="color: #aaa; text-decoration:none"><a href="https://shopnekos.ca">shopnekos.ca</a> | <a href="mailto:hello@shopnekos.ca">hello@shopnekos.ca</a></span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 `
 
   try {

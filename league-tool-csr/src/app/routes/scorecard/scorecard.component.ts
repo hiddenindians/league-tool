@@ -18,7 +18,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../shared/models/user.model';
 import { Errors } from '../../shared/models/errors.model';
 //import { RouterLink } from '@angular/router';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 interface ScoreForm {
   game: FormControl;
   password: FormControl;
@@ -33,7 +33,6 @@ interface ScoreForm {
     MatButtonModule,
     MatStepperModule,
     MatRadioModule,
-    MatProgressSpinnerModule
    // RouterLink,
   ],
   templateUrl: './scorecard.component.html',
