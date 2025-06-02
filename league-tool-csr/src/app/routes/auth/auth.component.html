@@ -202,8 +202,8 @@
       } @else if (authType === 'login') {
         <a [routerLink]="['/auth/register']">Need an account?</a>
         <a [routerLink]="['/auth/forgot-password']">Forgot your password?</a>
-        <a [routerLink]="['/auth/resend-verification']">Resend Verification Email</a>
       } @else if (authType === 'forgot' || authType === 'resend' ) {
+        <a [routerLink]="['/auth/resend-verification']">Resend Verification Email</a>
         <a [routerLink]="['/auth/login']">Back to login</a>
       } @else {
         <!-- no footer link for reset -->
