@@ -53,8 +53,11 @@ export class ManageUsersComponent {
   private loadUsers(): void {
     this.feathers
       .service('users')
-      .find({ query: {} })
+      .find({ query: {
+        $limit: 100
+      }})
       .then((data: any) => {
+        console.log(data)
         this.users = Array.isArray(data) ? data : data.data;
       })
       .catch((err: any) => console.error('error loading users', err));
