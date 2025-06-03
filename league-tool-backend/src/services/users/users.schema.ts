@@ -49,7 +49,7 @@ export const userSchema = Type.Object(
     ),
 
     first_run: Type.Boolean({ default: true }),
-    isVerified: Type.Boolean({ default: false }),
+    isVerified: Type.Optional(Type.Boolean({ default: false })),
     verifyToken: Type.Optional(Type.Union([Type.String(), Type.Null()])),
     verifyShortToken: Type.Optional(Type.Union([Type.String(), Type.Null()])),
     verifyExpires: Type.Optional(Type.Union([Type.Number(), Type.Null()])),
@@ -83,7 +83,8 @@ export const userDataSchema = Type.Pick(
     'games',
     'redemptions',
     'total_points',
-    'total_redeemed'
+    'total_redeemed',
+    'isVerified'
   ],
   {
     $id: 'UserData'

@@ -27,6 +27,7 @@ import { preventDuplicateBonusCode } from '../../hooks/prevent-duplicate-bonus-c
 import { notifyUserRedemption } from '../../hooks/notify-user-redemption'
 import { generateQrCode } from '../../hooks/generate-qr-code'
 import { notifyPointsAdded } from '../../hooks/notify-points-added'
+import crypto from 'crypto'
 export * from './users.class'
 export * from './users.schema'
 
@@ -40,6 +41,18 @@ const isLocalSignup = (context: HookContext) => {
   //    or the strategy isn’t ‘discord’
   const strategy = context.params?.authentication?.strategy
   return strategy !== 'discord'
+}
+
+const addGravatar = () => {
+  return async (context: HookContext) => {
+    const { data } = context
+    if (!data.avatar && data.email) {
+      const email = data.email.trim().toLowerCase()
+      const hash = crypto.createHash('md5').update(email).digest('hex')
+      data.avatar = `https://www.gravatar.com/avatar/${hash}?d=identicon&r=PG`
+    }
+    return context
+  }
 }
 
 const sendVerify = () => {
@@ -81,6 +94,7 @@ export const user = (app: Application) => {
       find: [],
       get: [],
       create: [
+        addGravatar(),
         preventDuplicateUsername,
         preventDuplicateEmails,
         schemaHooks.validateData(userDataValidator),
