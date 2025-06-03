@@ -9,7 +9,8 @@ export interface User {
     total_points: number,
     total_redeemed: number,
     games: [{}],
-    redemptions: [{}] 
-    bonus_codes_used: [{}]
+    redemptions: [{}], 
+    bonus_codes_used: [{}],
+    isVerified: boolean
     
 }

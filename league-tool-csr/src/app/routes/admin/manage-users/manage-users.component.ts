@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   standalone: true,
@@ -30,7 +31,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatButtonModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
   ],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss',
@@ -40,6 +42,7 @@ export class ManageUsersComponent {
   editingUser: User | null = null;
   originalPoints: number | null = null;
   originalRole: string | null = null;
+  originalVerified: boolean | null = null;
 
   constructor(private auth: AuthService, private feathers: FeathersService) {}
 
@@ -60,6 +63,7 @@ export class ManageUsersComponent {
     this.editingUser = user;
     this.originalPoints = user.total_points;
     this.originalRole = user.role;
+    this.originalVerified = user.isVerified;
   }
 
   savePoints(user: User | null) {
@@ -73,11 +77,15 @@ export class ManageUsersComponent {
     if (user.role !== this.originalRole) {
       updateData.role = user.role;
     }
+    if (user.isVerified !== this.originalVerified) {
+      updateData.isVerified = user.isVerified;
+    }
 
     if (Object.keys(updateData).length === 0) {
       this.editingUser = null;
       this.originalPoints = null;
       this.originalRole = null;
+      this.originalVerified = null;
       return;
     }
 
@@ -88,6 +96,7 @@ export class ManageUsersComponent {
         this.editingUser = null;
         this.originalPoints = null;
         this.originalRole = null;
+        this.originalVerified = null;
       })
       .catch((err: any) => console.error('Error saving points', err));
   }

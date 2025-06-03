@@ -39,6 +39,7 @@
                   <mat-option value="player">Player</mat-option>
                 </mat-select>
               </mat-form-field>
+              <mat-checkbox [(ngModel)]="editingUser!.isVerified">Verified</mat-checkbox>
               <button mat-icon-button color="primary" (click)="savePoints(editingUser)">
                 <mat-icon>check</mat-icon>
               </button>
@@ -59,6 +60,9 @@
           </mat-chip>
           <mat-chip [color]="user.role==='admin'?'primary':'warn'" selected>
             {{ user.role }}
+          </mat-chip>
+          <mat-chip [color]="user.isVerified ? 'primary' : 'warn'" selected>
+            {{ user.isVerified ? 'Verified' : 'Unverified' }}
           </mat-chip>
         </div>
       </mat-list-item>
